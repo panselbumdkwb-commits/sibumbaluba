@@ -356,29 +356,37 @@ CREATE INDEX idx_pengumuman_publik ON pengumuman(is_publik, created_at DESC);
 -- VIEWS
 -- ============================================================
 
-CREATE VIEW v_peserta_lengkap AS
+-- v_peserta_lengkap: SECURITY INVOKER agar RLS tetap aktif per user
+CREATE VIEW v_peserta_lengkap
+WITH (security_invoker = true)
+AS
 SELECT
   p.*,
-  s.judul AS seleksi_judul,
-  s.jenis AS seleksi_jenis,
+  s.judul  AS seleksi_judul,
+  s.jenis  AS seleksi_jenis,
   s.entitas AS seleksi_entitas,
-  COUNT(d.id) AS total_dokumen,
-  COUNT(d.id) FILTER (WHERE d.status_verifikasi = 'diverifikasi') AS dokumen_verified,
-  COUNT(d.id) FILTER (WHERE d.status_verifikasi = 'ditolak') AS dokumen_ditolak,
-  COUNT(d.id) FILTER (WHERE d.status_verifikasi = 'pending') AS dokumen_pending
+  COUNT(d.id)                                                        AS total_dokumen,
+  COUNT(d.id) FILTER (WHERE d.status_verifikasi = 'diverifikasi')   AS dokumen_verified,
+  COUNT(d.id) FILTER (WHERE d.status_verifikasi = 'ditolak')        AS dokumen_ditolak,
+  COUNT(d.id) FILTER (WHERE d.status_verifikasi = 'pending')        AS dokumen_pending
 FROM peserta_seleksi p
-JOIN seleksi s ON p.seleksi_id = s.id
-LEFT JOIN dokumen_peserta d ON p.id = d.peserta_id
+JOIN seleksi          s ON p.seleksi_id = s.id
+LEFT JOIN dokumen_peserta d ON p.id      = d.peserta_id
 GROUP BY p.id, s.judul, s.jenis, s.entitas;
 
-CREATE VIEW v_statistik AS
+-- v_statistik: SECURITY INVOKER agar RLS tetap aktif per user
+-- Catatan: subquery COUNT hanya menghitung baris yang boleh dilihat oleh
+-- querying user sesuai RLS masing-masing tabel.
+CREATE VIEW v_statistik
+WITH (security_invoker = true)
+AS
 SELECT
-  (SELECT COUNT(*) FROM bumd WHERE is_active = true) AS total_bumd,
-  (SELECT COUNT(*) FROM blud WHERE is_active = true) AS total_blud,
-  (SELECT COUNT(*) FROM seleksi WHERE status IN ('buka','selesai')) AS total_seleksi,
-  (SELECT COUNT(*) FROM peserta_seleksi) AS total_peserta,
-  (SELECT COUNT(*) FROM regulasi WHERE is_active = true) AS total_regulasi,
-  (SELECT COUNT(*) FROM sop WHERE is_active = true) AS total_sop;
+  (SELECT COUNT(*) FROM bumd         WHERE is_active = true)              AS total_bumd,
+  (SELECT COUNT(*) FROM blud         WHERE is_active = true)              AS total_blud,
+  (SELECT COUNT(*) FROM seleksi      WHERE status IN ('buka','selesai'))  AS total_seleksi,
+  (SELECT COUNT(*) FROM peserta_seleksi)                                  AS total_peserta,
+  (SELECT COUNT(*) FROM regulasi     WHERE is_active = true)              AS total_regulasi,
+  (SELECT COUNT(*) FROM sop          WHERE is_active = true)              AS total_sop;
 
 -- ============================================================
 -- ENABLE ROW LEVEL SECURITY
