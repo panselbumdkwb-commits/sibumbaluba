@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-client'
 
 const PERIODE_OPTIONS = [
   'TW1-2025','TW2-2025','TW3-2025','TW4-2025','TAHUNAN-2025',

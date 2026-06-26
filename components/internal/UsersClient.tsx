@@ -8,7 +8,7 @@ import { UserPlus, UserCheck, UserX, Loader2, Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 import { formatDate } from '@/lib/utils'
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-client'
 
 interface RoleRef { name: string }
 interface UserRow { id: string; username: string; full_name: string | null; is_active: boolean; created_at: string; role: RoleRef | null }

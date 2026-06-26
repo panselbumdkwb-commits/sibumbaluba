@@ -9,7 +9,7 @@ import {
   Award, ArrowLeft, Loader2, Search, Filter, Download
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-client'
 import { formatDate, getStatusColor } from '@/lib/utils'
 import { DOKUMEN_LABELS, STATUS_PESERTA_LABELS, STATUS_VERIFIKASI_LABELS } from '@/lib/types'
 import { Badge } from '@/components/ui/badge'

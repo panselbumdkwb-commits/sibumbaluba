@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Bell, LogOut, Sun, Moon, Menu } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-client'
 import { toast } from 'sonner'
 import type { User } from '@/lib/types'
 

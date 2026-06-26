@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { FileText, Eye, EyeOff, Loader2, ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-client'
 
 export default function PortalPesertaLoginPage() {
   const router = useRouter()

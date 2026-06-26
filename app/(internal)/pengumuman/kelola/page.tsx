@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Plus, Pencil, Trash2, Eye, EyeOff, Bell, Loader2, Save, X } from 'lucide-react'
 import { toast } from 'sonner'
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-client'
 import { Badge } from '@/components/ui/badge'
 import { formatDate } from '@/lib/utils'
 

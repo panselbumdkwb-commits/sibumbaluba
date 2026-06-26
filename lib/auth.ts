@@ -1,7 +1,7 @@
 // lib/auth.ts
 'use server'
 
-import { createServerComponentClient, createServiceClient } from './supabase'
+import { createServerComponentClient, createServiceClient } from './supabase-server'
 import bcrypt from 'bcryptjs'
 import type { User, RoleName } from './types'
 

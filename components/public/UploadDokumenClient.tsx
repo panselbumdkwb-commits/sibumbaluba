@@ -9,7 +9,7 @@ import {
   Bell, RefreshCw, Eye, Trash2, Loader2, User
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-client'
 import { fileSizeLabel, getStatusColor, formatDateTime } from '@/lib/utils'
 import type { DokumenPeserta, PesertaSeleksi, Seleksi } from '@/lib/types'
 import { DOKUMEN_LABELS, STATUS_PESERTA_LABELS, STATUS_VERIFIKASI_LABELS } from '@/lib/types'

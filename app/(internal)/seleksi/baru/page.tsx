@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Loader2, Plus, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-client'
 
 const JENIS_SELEKSI = ['Direksi','Dewan Pengawas','Dewas','Direktur','Komisaris','lainnya'] as const
 
