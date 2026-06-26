@@ -1,4 +1,4 @@
-import { createServerComponentClient } from '@/lib/supabase'
+import { createServerComponentClient } from '@/lib/supabase-server'
 import { Bell, FileDown, Calendar } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import type { Pengumuman } from '@/lib/types'

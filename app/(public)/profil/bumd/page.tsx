@@ -1,4 +1,4 @@
-import { createServerComponentClient } from '@/lib/supabase'
+import { createServerComponentClient } from '@/lib/supabase-server'
 import Link from 'next/link'
 import { Building2, MapPin, Phone, Globe, ArrowRight } from 'lucide-react'
 import type { Bumd } from '@/lib/types'

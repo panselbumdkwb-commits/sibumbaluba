@@ -1,4 +1,4 @@
-import { createServerComponentClient } from '@/lib/supabase'
+import { createServerComponentClient } from '@/lib/supabase-server'
 import { FileBarChart, Download, BarChart3, TrendingUp, Users, FileText } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { formatDate } from '@/lib/utils'

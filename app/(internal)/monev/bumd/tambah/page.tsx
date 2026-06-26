@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -40,7 +40,7 @@ function Field({ label, value, onChange, type = 'number', placeholder = '' }: Fi
 
 interface BumdOption { id: string; nama: string; singkatan: string | null }
 
-export default function TambahMonevBumd() {
+function TambahMonevBumdInner() {
   const router = useRouter()
   const params = useSearchParams()
   const defaultBumdId = params.get('bumd_id') ?? ''
@@ -225,5 +225,13 @@ export default function TambahMonevBumd() {
         </div>
       </form>
     </div>
+  )
+}
+
+export default function TambahMonevBumd() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" /></div>}>
+      <TambahMonevBumdInner />
+    </Suspense>
   )
 }

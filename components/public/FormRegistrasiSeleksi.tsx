@@ -3,7 +3,7 @@
 import React from 'react'
 
 import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Loader2, UserPlus, CheckCircle2, X, Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Seleksi } from '@/lib/types'
@@ -29,10 +29,15 @@ const PENDIDIKAN_OPTIONS = ['SMA/SMK', 'D3', 'S1', 'S2', 'S3', 'Profesi']
 
 export default function FormRegistrasiSeleksi({ seleksiAktif }: Props) {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const defaultSeleksiId = searchParams.get('seleksi_id') ?? ''
+  const defaultSeleksiId = typeof window !== 'undefined'
+    ? (new URLSearchParams(window.location.search).get('seleksi_id') ??
+       new URLSearchParams(window.location.search).get('daftar') ?? '')
+    : ''
 
-  const [open, setOpen] = useState(!!defaultSeleksiId)
+  const [open, setOpen] = useState(false)
+  React.useEffect(() => {
+    if (defaultSeleksiId) setOpen(true)
+  }, [defaultSeleksiId])
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)

@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createServerComponentClient } from '@/lib/supabase'
+import { createServerComponentClient } from '@/lib/supabase-server'
 import UploadDokumenClient from '@/components/public/UploadDokumenClient'
 import type { DokumenPeserta, PesertaSeleksi, Seleksi } from '@/lib/types'
 

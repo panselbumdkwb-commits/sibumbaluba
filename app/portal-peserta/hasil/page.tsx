@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createServerComponentClient } from '@/lib/supabase'
+import { createServerComponentClient } from '@/lib/supabase-server'
 import { Trophy, XCircle, Clock, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { getStatusColor } from '@/lib/utils'

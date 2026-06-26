@@ -1,6 +1,6 @@
 // app/(public)/regulasi/page.tsx
-import { createServerComponentClient } from '@/lib/supabase'
-import { FileText, Download, Search } from 'lucide-react'
+import { createServerComponentClient } from '@/lib/supabase-server'
+import { FileText } from 'lucide-react'
 import RegulasiPublikClient from '@/components/public/RegulasiPublikClient'
 
 async function getData() {

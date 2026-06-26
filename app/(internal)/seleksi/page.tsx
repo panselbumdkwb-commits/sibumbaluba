@@ -1,4 +1,4 @@
-import { createServerComponentClient } from '@/lib/supabase'
+import { createServerComponentClient } from '@/lib/supabase-server'
 import Link from 'next/link'
 import { Plus, Users, Calendar, Eye } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'

@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { createServerComponentClient } from '@/lib/supabase'
+import { createServerComponentClient } from '@/lib/supabase-server'
 import { formatDate, getStatusColor } from '@/lib/utils'
 import { Calendar, Users, FileText, ArrowRight, Clock } from 'lucide-react'
 import type { Seleksi } from '@/lib/types'

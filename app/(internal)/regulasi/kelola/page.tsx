@@ -1,4 +1,4 @@
-import { createServerComponentClient } from '@/lib/supabase'
+import { createServerComponentClient } from '@/lib/supabase-server'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import RegulasiFilterClient from '@/components/internal/RegulasiFilterClient'

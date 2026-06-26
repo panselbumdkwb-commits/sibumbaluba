@@ -1,5 +1,5 @@
-import { createServerComponentClient } from '@/lib/supabase'
-import { BookOpen, Download, Search } from 'lucide-react'
+import { createServerComponentClient } from '@/lib/supabase-server'
+import { BookOpen } from 'lucide-react'
 import SopPublikClient from '@/components/public/SopPublikClient'
 
 async function getData() {

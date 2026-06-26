@@ -1,10 +1,11 @@
+import type { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
-import { createServerComponentClient } from '@/lib/supabase'
+import { createServerComponentClient } from '@/lib/supabase-server'
 import InternalSidebar from '@/components/internal/InternalSidebar'
 import InternalHeader from '@/components/internal/InternalHeader'
 import type { User } from '@/lib/types'
 
-export default async function InternalLayout({ children }: { children: React.ReactNode }) {
+export default async function InternalLayout({ children }: { children: ReactNode }) {
   const supabase = await createServerComponentClient()
   const { data: { user: authUser } } = await supabase.auth.getUser()
 

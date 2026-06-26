@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createServerComponentClient } from '@/lib/supabase'
+import { createServerComponentClient } from '@/lib/supabase-server'
 
 interface PesertaRow  { nama: string; nomor_peserta: string | null; pendidikan: string | null; status: string }
 interface TahapanRow  { nama_tahap: string; tanggal_mulai: string | null; status: string }

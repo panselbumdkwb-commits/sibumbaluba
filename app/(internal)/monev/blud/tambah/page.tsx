@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -32,7 +32,7 @@ function Section({ title, children }: SectionProps) {
 
 interface BludOption { id: string; nama: string }
 
-export default function TambahMonevBlud() {
+function TambahMonevBludInner() {
   const router = useRouter()
   const params = useSearchParams()
   const defaultBludId = params.get('blud_id') ?? ''
@@ -280,5 +280,13 @@ export default function TambahMonevBlud() {
         </div>
       </form>
     </div>
+  )
+}
+
+export default function TambahMonevBlud() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" /></div>}>
+      <TambahMonevBludInner />
+    </Suspense>
   )
 }

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, ReactNode } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
 import './globals.css'
@@ -16,16 +16,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'id_ID',
     title: 'SIMBUBALADA – Kota Batu',
-    description: 'Sistem Informasi Monitoring, Evaluasi, Pembinaan, Pengelolaan dan Seleksi BUMD-BLUD Kota Batu',
+    description:
+      'Sistem Informasi Monitoring, Evaluasi, Pembinaan, Pengelolaan dan Seleksi BUMD-BLUD Kota Batu',
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="id" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
       </head>
       <body>
         <ThemeProvider

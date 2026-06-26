@@ -1,4 +1,4 @@
-import { createServerComponentClient } from '@/lib/supabase'
+import { createServerComponentClient } from '@/lib/supabase-server'
 import HeroBanner from '@/components/public/HeroBanner'
 import RunningText from '@/components/public/RunningText'
 import StatistikWidget from '@/components/public/StatistikWidget'
