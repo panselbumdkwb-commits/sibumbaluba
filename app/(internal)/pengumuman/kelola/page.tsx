@@ -6,23 +6,31 @@ import { Plus, Pencil, Trash2, Eye, EyeOff, Bell, Loader2, Save, X } from 'lucid
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase'
 import { Badge } from '@/components/ui/badge'
-import { formatDate, getStatusColor } from '@/lib/utils'
+import { formatDate } from '@/lib/utils'
 
-interface Pengumuman {
-  id: string; judul: string; isi: string | null; kategori: string
-  is_publik: boolean; file_url: string | null; created_at: string
+interface PengumumanRow {
+  id: string; judul: string; isi: string | null
+  kategori: string; is_publik: boolean; file_url: string | null; created_at: string
 }
 
-const KATEGORI_OPTIONS = ['umum','seleksi','monev','regulasi','sop']
+interface FormState {
+  judul: string; isi: string; kategori: string; is_publik: boolean
+}
+
+const KATEGORI_OPTIONS = ['umum','seleksi','monev','regulasi','sop'] as const
+const KATEGORI_COLOR: Record<string, string> = {
+  umum: 'bg-gray-100 text-gray-700', seleksi: 'bg-purple-100 text-purple-700',
+  monev: 'bg-blue-100 text-blue-700', regulasi: 'bg-red-100 text-red-700', sop: 'bg-teal-100 text-teal-700',
+}
 
 export default function PengumumanKelolaPage() {
   const router = useRouter()
-  const [list, setList] = useState<Pengumuman[]>([])
+  const [list, setList] = useState<PengumumanRow[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [saving, setSaving] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)
-  const [form, setForm] = useState({ judul: '', isi: '', kategori: 'umum', is_publik: false })
+  const [form, setForm] = useState<FormState>({ judul: '', isi: '', kategori: 'umum', is_publik: false })
 
   const supabase = createClient()
 
@@ -31,7 +39,7 @@ export default function PengumumanKelolaPage() {
   async function loadData() {
     setLoading(true)
     const { data } = await supabase.from('pengumuman').select('*').order('created_at', { ascending: false })
-    setList(data ?? [])
+    setList((data as PengumumanRow[]) ?? [])
     setLoading(false)
   }
 
@@ -41,7 +49,7 @@ export default function PengumumanKelolaPage() {
     setShowForm(true)
   }
 
-  function openEdit(p: Pengumuman) {
+  function openEdit(p: PengumumanRow) {
     setEditId(p.id)
     setForm({ judul: p.judul, isi: p.isi ?? '', kategori: p.kategori, is_publik: p.is_publik })
     setShowForm(true)
@@ -51,16 +59,13 @@ export default function PengumumanKelolaPage() {
     if (!form.judul.trim()) { toast.error('Judul wajib diisi'); return }
     setSaving(true)
     try {
+      const payload = { judul: form.judul, isi: form.isi || null, kategori: form.kategori, is_publik: form.is_publik }
       if (editId) {
-        const { error } = await supabase.from('pengumuman').update({
-          judul: form.judul, isi: form.isi || null, kategori: form.kategori, is_publik: form.is_publik,
-        }).eq('id', editId)
+        const { error } = await supabase.from('pengumuman').update(payload).eq('id', editId)
         if (error) { toast.error(error.message); return }
         toast.success('Pengumuman diperbarui')
       } else {
-        const { error } = await supabase.from('pengumuman').insert({
-          judul: form.judul, isi: form.isi || null, kategori: form.kategori, is_publik: form.is_publik,
-        })
+        const { error } = await supabase.from('pengumuman').insert(payload)
         if (error) { toast.error(error.message); return }
         toast.success('Pengumuman dibuat')
       }
@@ -71,25 +76,19 @@ export default function PengumumanKelolaPage() {
 
   async function togglePublik(id: string, current: boolean) {
     await supabase.from('pengumuman').update({ is_publik: !current }).eq('id', id)
-    setList(prev => prev.map(p => p.id === id ? { ...p, is_publik: !current } : p))
-    toast.success(!current ? 'Pengumuman dipublikasikan' : 'Pengumuman disembunyikan')
+    setList(prev => prev.map((p: PengumumanRow) => p.id === id ? { ...p, is_publik: !current } : p))
+    toast.success(!current ? 'Dipublikasikan' : 'Disembunyikan')
   }
 
   async function handleDelete(id: string) {
     if (!confirm('Hapus pengumuman ini?')) return
     const { error } = await supabase.from('pengumuman').delete().eq('id', id)
     if (error) { toast.error('Gagal menghapus'); return }
-    setList(prev => prev.filter(p => p.id !== id))
+    setList(prev => prev.filter((p: PengumumanRow) => p.id !== id))
     toast.success('Pengumuman dihapus')
   }
 
-  const KATEGORI_COLOR: Record<string, string> = {
-    umum: 'bg-gray-100 text-gray-700',
-    seleksi: 'bg-purple-100 text-purple-700',
-    monev: 'bg-blue-100 text-blue-700',
-    regulasi: 'bg-red-100 text-red-700',
-    sop: 'bg-teal-100 text-teal-700',
-  }
+  const inputCls = 'w-full px-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary'
 
   return (
     <div className="space-y-6">
@@ -117,29 +116,32 @@ export default function PengumumanKelolaPage() {
             <div className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1.5">Judul <span className="text-red-500">*</span></label>
-                <input value={form.judul} onChange={e => setForm(f => ({ ...f, judul: e.target.value }))}
+                <input value={form.judul}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm((f: FormState) => ({ ...f, judul: e.target.value }))}
                   placeholder="Judul pengumuman"
-                  className="w-full h-10 px-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                  className={`${inputCls} h-10`} />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1.5">Isi Pengumuman</label>
-                <textarea value={form.isi} onChange={e => setForm(f => ({ ...f, isi: e.target.value }))} rows={5}
-                  placeholder="Isi pengumuman..."
-                  className="w-full px-3 py-2 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none" />
+                <textarea value={form.isi}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setForm((f: FormState) => ({ ...f, isi: e.target.value }))}
+                  rows={5} placeholder="Isi pengumuman..."
+                  className={`${inputCls} py-2 resize-none`} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-1.5">Kategori</label>
-                  <select value={form.kategori} onChange={e => setForm(f => ({ ...f, kategori: e.target.value }))}
-                    className="w-full h-10 px-3 rounded-lg border border-input bg-background text-sm focus:outline-none">
+                  <select value={form.kategori}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setForm((f: FormState) => ({ ...f, kategori: e.target.value }))}
+                    className={`${inputCls} h-10`}>
                     {KATEGORI_OPTIONS.map(k => <option key={k} value={k} className="capitalize">{k}</option>)}
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1.5">Visibilitas</label>
                   <label className="flex items-center gap-3 h-10 cursor-pointer">
-                    <div className={`relative w-10 h-6 rounded-full transition-colors ${form.is_publik ? 'bg-primary' : 'bg-muted'}`}
-                      onClick={() => setForm(f => ({ ...f, is_publik: !f.is_publik }))}>
+                    <div className={`relative w-10 h-6 rounded-full transition-colors cursor-pointer ${form.is_publik ? 'bg-primary' : 'bg-muted'}`}
+                      onClick={() => setForm((f: FormState) => ({ ...f, is_publik: !f.is_publik }))}>
                       <div className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition-transform ${form.is_publik ? 'translate-x-5' : 'translate-x-1'}`} />
                     </div>
                     <span className="text-sm">{form.is_publik ? '🌐 Publik' : '🔒 Internal'}</span>
@@ -149,9 +151,7 @@ export default function PengumumanKelolaPage() {
             </div>
             <div className="flex gap-3 p-6 pt-0 justify-end">
               <button onClick={() => setShowForm(false)}
-                className="px-4 py-2 rounded-lg border border-border hover:bg-accent text-sm transition-colors">
-                Batal
-              </button>
+                className="px-4 py-2 rounded-lg border border-border hover:bg-accent text-sm transition-colors">Batal</button>
               <button onClick={handleSave} disabled={saving}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 disabled:opacity-60 transition-colors">
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
@@ -175,13 +175,13 @@ export default function PengumumanKelolaPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/40">
-                {['Judul', 'Kategori', 'Visibilitas', 'Tanggal', 'Aksi'].map(h => (
+                {['Judul','Kategori','Visibilitas','Tanggal','Aksi'].map(h => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {list.map(p => (
+              {list.map((p: PengumumanRow) => (
                 <tr key={p.id} className="border-b border-border/50 hover:bg-muted/30">
                   <td className="px-4 py-3">
                     <div className="font-medium line-clamp-1 max-w-xs">{p.judul}</div>
@@ -200,8 +200,7 @@ export default function PengumumanKelolaPage() {
                   <td className="px-4 py-3 text-xs text-muted-foreground">{formatDate(p.created_at)}</td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1">
-                      <button onClick={() => togglePublik(p.id, p.is_publik)}
-                        title={p.is_publik ? 'Sembunyikan' : 'Publikasikan'}
+                      <button onClick={() => togglePublik(p.id, p.is_publik)} title={p.is_publik ? 'Sembunyikan' : 'Publikasikan'}
                         className={`h-7 w-7 flex items-center justify-center rounded border transition-colors ${p.is_publik ? 'border-green-200 bg-green-50 hover:bg-green-100 text-green-600' : 'border-border hover:bg-accent text-muted-foreground'}`}>
                         {p.is_publik ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
                       </button>

@@ -3,7 +3,7 @@ import { createServiceClient, createServerComponentClient } from '@/lib/supabase
 
 export async function POST(req: Request) {
   try {
-    // Pastikan hanya super_admin
+    // Cek super_admin
     const serverClient = await createServerComponentClient()
     const { data: { user } } = await serverClient.auth.getUser()
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -18,12 +18,15 @@ export async function POST(req: Request) {
     if (!username || !password || !role_id) {
       return NextResponse.json({ error: 'Data tidak lengkap' }, { status: 400 })
     }
+    if (password.length < 8) {
+      return NextResponse.json({ error: 'Password minimal 8 karakter' }, { status: 400 })
+    }
 
-    const supabase = createServiceClient()
+    const supabase = await createServiceClient()
 
-    // Cek username
+    // Cek username unik
     const { data: existing } = await supabase
-      .from('users').select('id').eq('username', username).single()
+      .from('users').select('id').eq('username', username).maybeSingle()
     if (existing) return NextResponse.json({ error: 'Username sudah digunakan' }, { status: 409 })
 
     // Buat auth user
@@ -35,7 +38,11 @@ export async function POST(req: Request) {
 
     // Insert users table
     const { error: insertError } = await supabase.from('users').insert({
-      id: authData.user.id, username, full_name: full_name || null, role_id, is_active: true,
+      id: authData.user.id,
+      username,
+      full_name: full_name || null,
+      role_id,
+      is_active: true,
     })
     if (insertError) {
       await supabase.auth.admin.deleteUser(authData.user.id)

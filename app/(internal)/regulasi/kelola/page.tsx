@@ -1,22 +1,33 @@
 import { createServerComponentClient } from '@/lib/supabase'
 import Link from 'next/link'
-import { Plus, FileText, Download, Search } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { formatDate } from '@/lib/utils'
-import RegulasiFilerClient from '@/components/internal/RegulasiFilterClient'
+import { Plus } from 'lucide-react'
+import RegulasiFilterClient from '@/components/internal/RegulasiFilterClient'
+
+interface KategoriRef { nama: string }
+interface RegulasiRow {
+  id: string; judul: string; nomor: string | null; tahun: number | null
+  is_active: boolean; file_url: string | null; created_at: string
+  kategori: KategoriRef | null
+}
+interface KategoriRow { id: string; nama: string }
 
 async function getData() {
   const supabase = await createServerComponentClient()
   const [regulasiRes, kategoriRes] = await Promise.all([
-    supabase.from('regulasi').select('*, kategori:kategori_regulasi(nama)').order('tahun', { ascending: false }).order('created_at', { ascending: false }),
-    supabase.from('kategori_regulasi').select('*').order('urutan'),
+    supabase.from('regulasi')
+      .select('id,judul,nomor,tahun,is_active,file_url,created_at,kategori:kategori_regulasi(nama)')
+      .order('tahun', { ascending: false })
+      .order('created_at', { ascending: false }),
+    supabase.from('kategori_regulasi').select('id,nama').order('urutan'),
   ])
-  return { regulasi: regulasiRes.data ?? [], kategori: kategoriRes.data ?? [] }
+  return {
+    regulasi: (regulasiRes.data ?? []) as RegulasiRow[],
+    kategori: (kategoriRes.data ?? []) as KategoriRow[],
+  }
 }
 
 export default async function RegulasiKelolaPage() {
   const { regulasi, kategori } = await getData()
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -29,8 +40,7 @@ export default async function RegulasiKelolaPage() {
           <Plus className="h-4 w-4" /> Tambah Regulasi
         </Link>
       </div>
-
-      <RegulasiFilerClient regulasi={regulasi} kategori={kategori} />
+      <RegulasiFilterClient regulasi={regulasi} kategori={kategori} />
     </div>
   )
 }

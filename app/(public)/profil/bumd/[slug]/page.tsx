@@ -2,9 +2,9 @@ import { createServerComponentClient } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import { Building2, MapPin, Phone, Mail, Globe, Calendar, Target, Users, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import type { Bumd } from '@/lib/types'
+import type { Bumd, BumdProfil } from '@/lib/types'
 
-async function getData(slug: string) {
+async function getData(slug: string): Promise<Bumd | null> {
   const supabase = await createServerComponentClient()
   const { data } = await supabase.from('bumd').select('*').eq('slug', slug).single()
   return data as Bumd | null
@@ -12,10 +12,12 @@ async function getData(slug: string) {
 
 export default async function ProfilBumdDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const bumd = await getData(slug)
-  if (!bumd) notFound()
+  const bumdData = await getData(slug)
+  if (!bumdData) notFound()
+  const bumd = bumdData!
 
-  const p = bumd.profil
+  // Setelah notFound() dipanggil jika null, bumd pasti non-null di sini
+  const p = bumd.profil as BumdProfil
 
   return (
     <div className="container mx-auto px-4 py-10">
@@ -24,7 +26,7 @@ export default async function ProfilBumdDetailPage({ params }: { params: Promise
         <ArrowLeft className="h-4 w-4" /> Kembali ke Daftar BUMD
       </Link>
 
-      {/* Header Card */}
+      {/* Hero */}
       <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-8 mb-8 text-white">
         <div className="flex items-start gap-5">
           <div className="h-20 w-20 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
@@ -44,22 +46,22 @@ export default async function ProfilBumdDetailPage({ params }: { params: Promise
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Kontak & Info */}
+        {/* Kontak */}
         <div className="space-y-4">
           <div className="bg-card border border-border rounded-2xl p-6">
             <h3 className="font-bold mb-4">Informasi Kontak</h3>
             <div className="space-y-3">
               {[
-                { icon: MapPin, val: p?.alamat },
-                { icon: Phone, val: p?.telepon },
-                { icon: Mail, val: p?.email },
-                { icon: Globe, val: p?.website, isLink: true },
+                { icon: MapPin,    val: p?.alamat },
+                { icon: Phone,    val: p?.telepon },
+                { icon: Mail,     val: p?.email },
+                { icon: Globe,    val: p?.website, isLink: true },
                 { icon: Calendar, val: p?.tahun_berdiri ? `Berdiri: ${p.tahun_berdiri}` : undefined },
               ].filter(i => i.val).map(({ icon: Icon, val, isLink }) => (
-                <div key={val} className="flex items-start gap-3 text-sm">
+                <div key={String(val)} className="flex items-start gap-3 text-sm">
                   <Icon className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
                   {isLink
-                    ? <a href={val as string} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-all">{val}</a>
+                    ? <a href={String(val)} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-all">{val}</a>
                     : <span className="text-muted-foreground">{val}</span>
                   }
                 </div>
@@ -67,7 +69,6 @@ export default async function ProfilBumdDetailPage({ params }: { params: Promise
             </div>
           </div>
 
-          {/* Stats */}
           {(p?.modal_dasar || p?.pelanggan || p?.coverage) && (
             <div className="bg-card border border-border rounded-2xl p-6">
               <h3 className="font-bold mb-4">Data Singkat</h3>
@@ -95,7 +96,7 @@ export default async function ProfilBumdDetailPage({ params }: { params: Promise
           )}
         </div>
 
-        {/* Visi Misi & Detail */}
+        {/* Visi Misi */}
         <div className="lg:col-span-2 space-y-6">
           {p?.visi && (
             <div className="bg-card border border-border rounded-2xl p-6">
@@ -103,7 +104,7 @@ export default async function ProfilBumdDetailPage({ params }: { params: Promise
                 <Target className="h-5 w-5 text-primary" />
                 <h3 className="font-bold">Visi</h3>
               </div>
-              <p className="text-muted-foreground leading-relaxed italic">"{p.visi}"</p>
+              <p className="text-muted-foreground leading-relaxed italic">&ldquo;{p.visi}&rdquo;</p>
             </div>
           )}
 

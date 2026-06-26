@@ -9,9 +9,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Username dan password wajib diisi' }, { status: 400 })
     }
 
-    const supabase = createServiceClient()
+    const supabase = await createServiceClient()
 
-    // Find user by username
     const { data: user, error } = await supabase
       .from('users')
       .select('id, username, full_name, is_active, role:roles(name)')
@@ -26,7 +25,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Akun Anda tidak aktif' }, { status: 403 })
     }
 
-    // Get auth user to retrieve email
     const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(user.id)
 
     if (authError || !authUser.user?.email) {

@@ -2,9 +2,9 @@ import { createServerComponentClient } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import { Hospital, MapPin, Phone, Mail, ArrowLeft, Award, Users, CheckCircle2 } from 'lucide-react'
 import Link from 'next/link'
-import type { Blud } from '@/lib/types'
+import type { Blud, BludProfil } from '@/lib/types'
 
-async function getData(slug: string) {
+async function getData(slug: string): Promise<Blud | null> {
   const supabase = await createServerComponentClient()
   const { data } = await supabase.from('blud').select('*').eq('slug', slug).single()
   return data as Blud | null
@@ -12,14 +12,17 @@ async function getData(slug: string) {
 
 const AKREDITASI_COLOR: Record<string, string> = {
   Paripurna: 'bg-green-500', Utama: 'bg-blue-500',
-  Madya: 'bg-yellow-500', Dasar: 'bg-orange-500',
+  Madya: 'bg-yellow-500',   Dasar: 'bg-orange-500',
 }
 
 export default async function ProfilBludDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const blud = await getData(slug)
-  if (!blud) notFound()
-  const p = blud.profil
+  const bludData = await getData(slug)
+  if (!bludData) notFound()
+  const blud = bludData!
+
+  // notFound() melempar exception, jadi blud pasti non-null di bawah ini
+  const p = blud.profil as BludProfil
 
   return (
     <div className="container mx-auto px-4 py-10">
@@ -37,7 +40,7 @@ export default async function ProfilBludDetailPage({ params }: { params: Promise
           <div className="flex-1">
             <div className="text-emerald-200 text-sm font-medium mb-1">{blud.jenis} – BLUD</div>
             <h1 className="text-2xl lg:text-3xl font-bold">{blud.nama}</h1>
-            {p?.wilayah && <p className="text-emerald-200 mt-1 text-sm">{p.wilayah}</p>}
+            {p?.wilayah && <p className="text-emerald-200 mt-1 text-sm">{p.wilayah as string}</p>}
             {p?.akreditasi && (
               <div className="flex items-center gap-2 mt-3">
                 <Award className="h-4 w-4 text-yellow-300" />

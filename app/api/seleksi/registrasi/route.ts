@@ -7,7 +7,6 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { seleksi_id, nik, nama, ttl, alamat, pendidikan, whatsapp, username, password } = body
 
-    // Validasi input
     if (!seleksi_id || !nik || !nama || !username || !password) {
       return NextResponse.json({ error: 'Data tidak lengkap' }, { status: 400 })
     }
@@ -18,7 +17,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Password minimal 8 karakter' }, { status: 400 })
     }
 
-    const supabase = createServiceClient()
+    const supabase = await createServiceClient()
 
     // Cek seleksi masih buka
     const { data: seleksi } = await supabase
@@ -27,16 +26,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Seleksi tidak tersedia atau sudah ditutup' }, { status: 400 })
     }
 
-    // Cek username sudah dipakai
-    const { data: existing } = await supabase
-      .from('peserta_seleksi').select('id').eq('username', username).single()
-    if (existing) {
+    // Cek username unik
+    const { data: existingUser } = await supabase
+      .from('peserta_seleksi').select('id').eq('username', username).maybeSingle()
+    if (existingUser) {
       return NextResponse.json({ error: 'Username sudah digunakan, coba yang lain' }, { status: 409 })
     }
 
-    // Cek NIK di seleksi yang sama
+    // Cek NIK tidak duplikat di seleksi yang sama
     const { data: existingNik } = await supabase
-      .from('peserta_seleksi').select('id').eq('seleksi_id', seleksi_id).eq('nik', nik).single()
+      .from('peserta_seleksi').select('id').eq('seleksi_id', seleksi_id).eq('nik', nik).maybeSingle()
     if (existingNik) {
       return NextResponse.json({ error: 'NIK sudah terdaftar di seleksi ini' }, { status: 409 })
     }
@@ -44,7 +43,7 @@ export async function POST(request: Request) {
     // Hash password
     const password_hash = await bcrypt.hash(password, 12)
 
-    // Buat auth user untuk portal peserta
+    // Buat auth user
     const email = `peserta.${username}@simbubalada.internal`
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
       email,
@@ -70,16 +69,15 @@ export async function POST(request: Request) {
       .single()
 
     if (insertError) {
-      // rollback auth user
       await supabase.auth.admin.deleteUser(authData.user.id)
       return NextResponse.json({ error: insertError.message }, { status: 500 })
     }
 
-    // Kirim notifikasi registrasi
+    // Notifikasi
     await supabase.from('notifikasi').insert({
       peserta_id: peserta.id,
       judul: '✅ Registrasi Berhasil',
-      isi: `Selamat ${nama}, pendaftaran Anda berhasil. Nomor peserta: ${peserta.nomor_peserta}. Silakan upload dokumen persyaratan.`,
+      isi: `Selamat ${nama}, pendaftaran Anda berhasil. Nomor peserta: ${peserta.nomor_peserta ?? '-'}. Silakan upload dokumen persyaratan.`,
       kategori: 'sukses',
       action_url: '/portal-peserta/dokumen',
     })

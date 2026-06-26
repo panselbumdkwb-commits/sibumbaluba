@@ -57,7 +57,7 @@ export default function KontakPage() {
         {/* Form Pesan */}
         <div className="bg-card border border-border rounded-2xl p-8">
           <h2 className="text-xl font-bold mb-6">Kirim Pesan</h2>
-          <form className="space-y-4" onSubmit={e => e.preventDefault()}>
+          <form className="space-y-4" onSubmit={(e: React.FormEvent) => e.preventDefault()}>
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1.5">Nama Lengkap</label>

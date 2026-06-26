@@ -1,24 +1,23 @@
 'use client'
 
+import React from 'react'
+
 import { useState } from 'react'
-import { Search, FileText, Download, Pencil, Trash2 } from 'lucide-react'
+import { Search, Download, Pencil, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { formatDate } from '@/lib/utils'
 import { createClient } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
-interface Regulasi {
+interface KategoriRef { nama: string }
+interface RegulasiRow {
   id: string; judul: string; nomor: string | null; tahun: number | null
   is_active: boolean; file_url: string | null; created_at: string
-  kategori: { nama: string } | null
+  kategori: KategoriRef | null
 }
-
-interface Props {
-  regulasi: Regulasi[]
-  kategori: Array<{ id: string; nama: string }>
-}
+interface KategoriRow { id: string; nama: string }
+interface Props { regulasi: RegulasiRow[]; kategori: KategoriRow[] }
 
 export default function RegulasiFilterClient({ regulasi: initial, kategori }: Props) {
   const router = useRouter()
@@ -26,8 +25,8 @@ export default function RegulasiFilterClient({ regulasi: initial, kategori }: Pr
   const [filterKat, setFilterKat] = useState('')
 
   const filtered = initial.filter(r => {
-    const matchSearch = r.judul.toLowerCase().includes(search.toLowerCase()) ||
-      (r.nomor ?? '').toLowerCase().includes(search.toLowerCase())
+    const q = search.toLowerCase()
+    const matchSearch = r.judul.toLowerCase().includes(q) || (r.nomor ?? '').toLowerCase().includes(q)
     const matchKat = !filterKat || r.kategori?.nama === filterKat
     return matchSearch && matchKat
   })
@@ -43,7 +42,6 @@ export default function RegulasiFilterClient({ regulasi: initial, kategori }: Pr
 
   return (
     <div className="bg-card border border-border rounded-xl">
-      {/* Filter bar */}
       <div className="flex flex-col sm:flex-row gap-3 p-4 border-b border-border">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -57,26 +55,21 @@ export default function RegulasiFilterClient({ regulasi: initial, kategori }: Pr
           {kategori.map(k => <option key={k.id} value={k.nama}>{k.nama}</option>)}
         </select>
       </div>
-
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border bg-muted/40">
-              {['Judul', 'Nomor', 'Tahun', 'Kategori', 'Status', 'Aksi'].map(h => (
+              {['Judul','Nomor','Tahun','Kategori','Status','Aksi'].map(h => (
                 <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
-              <tr><td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
-                Tidak ada data regulasi
-              </td></tr>
+              <tr><td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">Tidak ada data regulasi</td></tr>
             ) : filtered.map(r => (
               <tr key={r.id} className="border-b border-border/50 hover:bg-muted/30">
-                <td className="px-4 py-3">
-                  <div className="font-medium line-clamp-2 max-w-xs">{r.judul}</div>
-                </td>
+                <td className="px-4 py-3"><div className="font-medium line-clamp-2 max-w-xs">{r.judul}</div></td>
                 <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{r.nomor ?? '-'}</td>
                 <td className="px-4 py-3 text-xs">{r.tahun ?? '-'}</td>
                 <td className="px-4 py-3">

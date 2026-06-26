@@ -71,14 +71,14 @@ export default function PortalPesertaLoginPage() {
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
               <label className="block text-sm font-medium mb-1.5">Username Peserta</label>
-              <input type="text" value={username} onChange={e => setUsername(e.target.value)}
+              <input type="text" value={username} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                 required autoComplete="username" placeholder="Username yang didaftarkan"
                 className="w-full h-10 px-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">Password</label>
               <div className="relative">
-                <input type={showPw ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)}
+                <input type={showPw ? 'text' : 'password'} value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                   required autoComplete="current-password" placeholder="Password Anda"
                   className="w-full h-10 px-3 pr-10 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
                 <button type="button" onClick={() => setShowPw(!showPw)}

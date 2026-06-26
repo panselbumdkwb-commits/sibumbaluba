@@ -75,7 +75,7 @@ export default function LoginPage() {
               <input
                 type="text"
                 value={username}
-                onChange={e => setUsername(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                 required
                 autoComplete="username"
                 placeholder="Masukkan username"
@@ -91,7 +91,7 @@ export default function LoginPage() {
                 <input
                   type={showPw ? 'text' : 'password'}
                   value={password}
-                  onChange={e => setPassword(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
                   placeholder="Masukkan password"

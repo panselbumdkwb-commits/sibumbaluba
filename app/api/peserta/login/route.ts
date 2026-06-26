@@ -9,7 +9,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Username dan password wajib diisi' }, { status: 400 })
     }
 
-    const supabase = createServiceClient()
+    const supabase = await createServiceClient()
 
     const { data: peserta } = await supabase
       .from('peserta_seleksi')
@@ -26,7 +26,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Username atau password salah' }, { status: 401 })
     }
 
-    // Get mapped email
+    if (!peserta.auth_user_id) {
+      return NextResponse.json({ error: 'Akun tidak lengkap, hubungi panitia' }, { status: 401 })
+    }
+
     const { data: authUser } = await supabase.auth.admin.getUserById(peserta.auth_user_id)
     if (!authUser.user?.email) {
       return NextResponse.json({ error: 'Akun tidak ditemukan' }, { status: 401 })
