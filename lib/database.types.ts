@@ -1,5 +1,5 @@
 // lib/database.types.ts
-// Simplified Supabase database types for SIMBUBALADA
+// Simplified Supabase database types for SIBUMBALUBA
 // Run `npx supabase gen types typescript` for full auto-generated types
 
 export type Json =
