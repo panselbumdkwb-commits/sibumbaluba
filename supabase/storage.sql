@@ -1,5 +1,5 @@
 -- ============================================================
--- SIMBUBALADA - Supabase Storage Setup
+-- SIBUMBALUMBA - Supabase Storage Setup
 -- Jalankan di Supabase SQL Editor SETELAH schema.sql
 -- ============================================================
 
