@@ -37,7 +37,7 @@ export default function HeroBanner() {
           <div>
             <h1 className="text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight text-foreground mb-5">
               <span className="bg-gradient-to-r from-primary via-[hsl(213,85%,45%)] to-secondary bg-clip-text text-transparent">
-                SIMBUBALADA
+                SIBUMBALUMBA
               </span>
               <br />
               <span className="text-[0.52em] font-semibold text-muted-foreground leading-relaxed">

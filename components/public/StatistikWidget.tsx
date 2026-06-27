@@ -20,7 +20,7 @@ export default function StatistikWidget({ statistik }: Props) {
           <div className="inline-flex items-center gap-2 rounded-full bg-background border border-border px-4 py-1.5 text-xs font-semibold text-muted-foreground mb-4">
             Data Terkini
           </div>
-          <h2 className="text-2xl font-bold text-foreground">Statistik SIMBUBALADA</h2>
+          <h2 className="text-2xl font-bold text-foreground">Statistik SIBUMBALUMBA</h2>
           <p className="text-sm text-muted-foreground mt-2">Ringkasan data pengelolaan BUMD-BLUD Kota Batu</p>
         </div>
 

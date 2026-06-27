@@ -67,7 +67,7 @@ export async function GET(
 </div>
 <h2>Berita Acara Seleksi</h2>
 <h2>${seleksi.jenis} ${seleksi.entitas} Kota Batu</h2>
-<div class="nomor">Nomor: .........../BA-SIMBUBALADA/${new Date().getFullYear()}</div>
+<div class="nomor">Nomor: .........../BA-SIBUMBALUMBA/${new Date().getFullYear()}</div>
 <p>Pada hari ini <strong>${now}</strong>, Tim Seleksi yang dibentuk berdasarkan Keputusan Wali Kota Batu
 telah melaksanakan proses seleksi <strong>${seleksi.jenis}</strong> untuk <strong>${seleksi.entitas}</strong>
 dengan judul: <strong>&ldquo;${seleksi.judul}&rdquo;</strong>.</p>

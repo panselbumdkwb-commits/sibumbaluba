@@ -3,7 +3,7 @@ import PublicHeader from '@/components/public/PublicHeader'
 import PublicFooter from '@/components/public/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'SIMBUBALADA – Kota Batu',
+  title: 'SIBUMBALUMBA – Kota Batu',
   description:
     'Sistem Informasi Monitoring, Evaluasi, Pembinaan, Pengelolaan dan Seleksi BUMD-BLUD Kota Batu',
 }

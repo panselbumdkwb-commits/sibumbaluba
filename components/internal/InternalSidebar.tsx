@@ -75,7 +75,7 @@ export default function InternalSidebar({ user }: Props) {
         </div>
         {!collapsed && (
           <div className="min-w-0 flex-1">
-            <div className="font-bold text-sm truncate">SIMBUBALADA</div>
+            <div className="font-bold text-sm truncate">SIBUMBALUMBA</div>
             <div className="text-[10px] text-muted-foreground capitalize">
               {role.replace(/_/g, ' ')}
             </div>

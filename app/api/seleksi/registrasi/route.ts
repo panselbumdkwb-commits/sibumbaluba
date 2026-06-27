@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     const password_hash = await bcrypt.hash(password, 12)
 
     // Buat auth user
-    const email = `peserta.${username}@simbubalada.internal`
+    const email = `peserta.${username}@sibumbalumba.internal`
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
       email,
       password,

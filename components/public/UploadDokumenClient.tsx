@@ -138,7 +138,7 @@ export default function UploadDokumenClient({ peserta, dokumen: initialDokumen, 
             </div>
             <div>
               <div className="font-bold text-sm">Portal Peserta</div>
-              <div className="text-[11px] text-muted-foreground">SIMBUBALADA</div>
+              <div className="text-[11px] text-muted-foreground">SIBUMBALUMBA</div>
             </div>
           </div>
           <div className="flex items-center gap-2">

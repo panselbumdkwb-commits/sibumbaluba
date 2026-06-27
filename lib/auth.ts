@@ -31,7 +31,7 @@ export async function registerPeserta(params: {
   if (existing) return { pesertaId: null, error: 'Username sudah digunakan' }
 
   const password_hash = await bcrypt.hash(params.password, 12)
-  const email = `peserta.${params.username}@simbubalada.internal`
+  const email = `peserta.${params.username}@sibumbalumba.internal`
 
   const { data: authData, error: authError } = await serviceClient.auth.admin.createUser({
     email, password: params.password, email_confirm: true,

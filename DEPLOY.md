@@ -7,7 +7,7 @@
 
 ### 1.1 Buat Project
 1. Buka https://supabase.com → Login → **New Project**
-2. Isi nama project: `SIBUMBALUMBA`
+2. Isi nama project: `sibumbalumba`
 3. Pilih region: **Southeast Asia (Singapore)**
 4. Buat password database (simpan baik-baik!)
 5. Klik **Create new project** → tunggu ~2 menit
@@ -50,7 +50,7 @@
 ### 1.6 Buat User Super Admin
 1. Buka **Authentication** → **Users** → **Add user** → **Create new user**
 2. Isi:
-   - Email: `superadmin@SIBUMBALUMBA.internal`
+   - Email: `superadmin@sibumbalumba.internal`
    - Password: `Admin@SIMBU2025!`
    - ☑ Auto Confirm User
 3. Klik **Create user**
@@ -80,15 +80,15 @@
 
 ### 2.1 Buat Repository
 1. Buka https://github.com → **New repository**
-2. Nama: `SIBUMBALUMBA`
+2. Nama: `sibumbalumba`
 3. Visibility: **Private** (disarankan)
 4. Klik **Create repository**
 
 ### 2.2 Upload Kode
 ```bash
 # Extract ZIP yang didownload
-unzip SIBUMBALUMBA-v1.0.zip
-cd SIBUMBALUMBA
+unzip sibumbalumba-v1.0.zip
+cd sibumbalumba
 
 # Buat file .env.local dari template
 cp .env.example .env.local
@@ -99,7 +99,7 @@ git init
 git add .
 git commit -m "feat: SIBUMBALUMBA v1.0 initial commit"
 git branch -M main
-git remote add origin https://github.com/USERNAME/SIBUMBALUMBA.git
+git remote add origin https://github.com/USERNAME/sibumbalumba.git
 git push -u origin main
 ```
 
@@ -110,7 +110,7 @@ git push -u origin main
 ### 3.1 Import Project
 1. Buka https://vercel.com → Login
 2. Klik **Add New** → **Project**
-3. Pilih repository `SIBUMBALUMBA` dari GitHub
+3. Pilih repository `sibumbalumba` dari GitHub
 4. Framework: **Next.js** (otomatis terdeteksi)
 
 ### 3.2 Set Environment Variables
@@ -127,7 +127,7 @@ Di halaman **Configure Project** → **Environment Variables**:
 ### 3.3 Deploy
 1. Klik **Deploy**
 2. Tunggu proses build (~3-5 menit)
-3. Jika sukses → URL Vercel akan muncul (misal: `SIBUMBALUMBA.vercel.app`)
+3. Jika sukses → URL Vercel akan muncul (misal: `sibumbalumba.vercel.app`)
 
 ### 3.4 Verifikasi Deploy
 Buka URL Vercel dan cek:
@@ -143,10 +143,10 @@ Buka URL Vercel dan cek:
 
 ### 4.1 Update Supabase Auth Settings
 1. Supabase Dashboard → **Authentication** → **URL Configuration**
-2. Isi **Site URL**: `https://SIBUMBALUMBA.vercel.app`
+2. Isi **Site URL**: `https://sibumbalumba.vercel.app`
 3. Tambah **Redirect URLs**:
    ```
-   https://SIBUMBALUMBA.vercel.app/**
+   https://sibumbalumba.vercel.app/**
    ```
 
 ### 4.2 Ganti Password Default
@@ -167,11 +167,11 @@ Login sebagai superadmin → `/users` → Tambah Pengguna:
 ### 4.4 Custom Domain (Opsional)
 Vercel Dashboard → Project → **Settings** → **Domains**:
 ```
-SIBUMBALUMBA.kotabatu.go.id
+sibumbalumba.kotabatu.go.id
 ```
 Tambah DNS CNAME record di pengelola domain:
 ```
-CNAME SIBUMBALUMBA → cname.vercel-dns.com
+CNAME sibumbalumba → cname.vercel-dns.com
 ```
 
 ---

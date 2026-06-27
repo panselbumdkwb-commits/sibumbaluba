@@ -32,7 +32,7 @@ export default function PublicFooter() {
                 <Shield className="h-5 w-5 text-white" />
               </div>
               <div>
-                <div className="font-bold text-base text-foreground tracking-tight">SIMBUBALADA</div>
+                <div className="font-bold text-base text-foreground tracking-tight">SIBUMBALUMBA</div>
                 <div className="text-[11px] text-muted-foreground font-medium">Kota Batu</div>
               </div>
             </Link>
@@ -46,7 +46,7 @@ export default function PublicFooter() {
               {[
                 { icon: MapPin, text: 'Jl. Panglima Sudirman No. 507, Kota Batu, Jawa Timur 65311' },
                 { icon: Phone, text: '(0341) 591024' },
-                { icon: Mail, text: 'simbubalada@kotabatu.go.id' },
+                { icon: Mail, text: 'sibumbalumba@kotabatu.go.id' },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-start gap-2.5 text-[13px] text-muted-foreground">
                   <Icon className="h-3.5 w-3.5 mt-0.5 shrink-0 text-primary/70" />
@@ -105,7 +105,7 @@ export default function PublicFooter() {
             © {new Date().getFullYear()} Pemerintah Kota Batu. Hak cipta dilindungi.
           </span>
           <span className="text-[11px] text-muted-foreground">
-            SIMBUBALADA v1.1 — Dibangun dengan Next.js & Supabase
+            SIBUMBALUMBA v1.1 — Dibangun dengan Next.js & Supabase
           </span>
         </div>
       </div>

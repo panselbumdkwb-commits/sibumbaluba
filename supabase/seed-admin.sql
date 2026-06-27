@@ -6,7 +6,7 @@
 
 -- LANGKAH 1: Buat user di Supabase Auth melalui Dashboard:
 --   Authentication → Users → Add User
---   Email: superadmin@SIBUMBALUMBA.internal
+--   Email: superadmin@sibumbalumba.internal
 --   Password: Admin@SIMBU2025! (GANTI setelah login pertama)
 --   Centang "Auto Confirm User"
 

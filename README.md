@@ -70,7 +70,7 @@ Dikelola oleh Bagian Perekonomian dan Sumber Daya Alam, Sekretariat Daerah Kota 
 ## 📁 Struktur Proyek
 
 ```
-SIBUMBALUMBA/
+sibumbalumba/
 ├── app/
 │   ├── (public)/           # Halaman tanpa login
 │   │   ├── page.tsx        # Beranda
@@ -131,8 +131,8 @@ SIBUMBALUMBA/
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/pemkot-batu/SIBUMBALUMBA.git
-cd SIBUMBALUMBA
+git clone https://github.com/pemkot-batu/sibumbalumba.git
+cd sibumbalumba
 npm install
 ```
 
@@ -177,7 +177,7 @@ Buka [http://localhost:3000](http://localhost:3000)
 ### Langkah 3 — Buat User Super Admin
 
 1. Buka **Authentication → Users → Add User**
-2. Email: `superadmin@SIBUMBALUMBA.internal`
+2. Email: `superadmin@sibumbalumba.internal`
 3. Password: `Admin@SIMBU2025!` *(ganti setelah pertama login)*
 4. Centang **"Auto Confirm User"**
 5. Catat UUID user yang dibuat
@@ -219,7 +219,7 @@ SELECT * FROM v_statistik;
 git init
 git add .
 git commit -m "initial commit: SIBUMBALUMBA v1.0"
-git remote add origin https://github.com/org/SIBUMBALUMBA.git
+git remote add origin https://github.com/org/sibumbalumba.git
 git push -u origin main
 ```
 
@@ -245,7 +245,7 @@ Klik **Deploy** — Vercel otomatis build dan deploy.
 
 Di **Project Settings → Domains**, tambahkan:
 ```
-SIBUMBALUMBA.kotabatu.go.id
+sibumbalumba.kotabatu.go.id
 ```
 
 ---
@@ -291,7 +291,7 @@ SIBUMBALUMBA.kotabatu.go.id
 Sekretariat Daerah Kota Batu
 Jl. Panglima Sudirman No. 507, Kota Batu 65311
 Telp: (0341) 591024
-Email: SIBUMBALUMBA@kotabatu.go.id
+Email: sibumbalumba@kotabatu.go.id
 
 ---
 

@@ -38,7 +38,7 @@ export default async function DashboardPage() {
     <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">Ringkasan data terkini SIMBUBALADA</p>
+        <p className="text-sm text-muted-foreground mt-1">Ringkasan data terkini SIBUMBALUMBA</p>
       </div>
 
       {/* Stats */}

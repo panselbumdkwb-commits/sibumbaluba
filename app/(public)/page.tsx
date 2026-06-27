@@ -38,7 +38,7 @@ export default async function BerandaPage() {
 
   const runningItems = pengumuman.length > 0
     ? pengumuman.map(p => p.judul)
-    : ['Selamat datang di SIMBUBALADA Kota Batu', 'Sistem Informasi Monitoring dan Seleksi BUMD-BLUD']
+    : ['Selamat datang di SIBUMBALUMBA Kota Batu', 'Sistem Informasi Monitoring dan Seleksi BUMD-BLUD']
 
   return (
     <div className="flex flex-col">

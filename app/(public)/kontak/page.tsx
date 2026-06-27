@@ -33,7 +33,7 @@ export default function KontakPage() {
             {
               icon: Mail,
               label: 'Email',
-              value: 'simbubalada@kotabatu.go.id',
+              value: 'sibumbalumba@kotabatu.go.id',
               color: 'text-blue-600 bg-blue-50 dark:bg-blue-950/30',
             },
             {

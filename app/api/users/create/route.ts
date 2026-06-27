@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     if (existing) return NextResponse.json({ error: 'Username sudah digunakan' }, { status: 409 })
 
     // Buat auth user
-    const email = `${username}@simbubalada.internal`
+    const email = `${username}@sibumbalumba.internal`
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
       email, password, email_confirm: true,
     })

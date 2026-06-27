@@ -63,7 +63,7 @@ export default function LoginPage() {
             <div className="h-16 w-16 rounded-2xl bg-primary flex items-center justify-center mb-4 shadow-lg">
               <Shield className="h-8 w-8 text-primary-foreground" />
             </div>
-            <h1 className="text-2xl font-bold text-foreground">SIMBUBALADA</h1>
+            <h1 className="text-2xl font-bold text-foreground">SIBUMBALUMBA</h1>
             <p className="text-sm text-muted-foreground mt-1">Login Internal – Kota Batu</p>
           </div>
 

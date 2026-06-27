@@ -86,7 +86,7 @@ export default function PublicHeader() {
                 <Shield className="h-[18px] w-[18px] text-white" />
               </div>
               <div className="leading-tight">
-                <div className="text-[13px] font-bold tracking-tight text-foreground">SIMBUBALADA</div>
+                <div className="text-[13px] font-bold tracking-tight text-foreground">SIBUMBALUMBA</div>
                 <div className="text-[10px] text-muted-foreground font-medium leading-none mt-0.5">Kota Batu</div>
               </div>
             </Link>
