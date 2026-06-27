@@ -1,12 +1,12 @@
 -- ============================================================
--- SIMBUBALADA - Seed Admin User
+-- SIBUMBALUMBA - Seed Admin User
 -- Jalankan SETELAH schema.sql dan setup storage
 -- Ganti password setelah login pertama!
 -- ============================================================
 
 -- LANGKAH 1: Buat user di Supabase Auth melalui Dashboard:
 --   Authentication → Users → Add User
---   Email: superadmin@simbubalada.internal
+--   Email: superadmin@SIBUMBALUMBA.internal
 --   Password: Admin@SIMBU2025! (GANTI setelah login pertama)
 --   Centang "Auto Confirm User"
 
@@ -19,7 +19,7 @@ INSERT INTO users (id, username, full_name, role_id, is_active)
 VALUES (
   'your-auth-user-uuid-here',  -- UUID dari auth.users
   'superadmin',
-  'Super Administrator SIMBUBALADA',
+  'Super Administrator SIBUMBALUMBA',
   (SELECT id FROM roles WHERE name = 'super_admin' LIMIT 1),
   true
 );
