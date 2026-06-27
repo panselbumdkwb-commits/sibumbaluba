@@ -5,8 +5,8 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: {
-    default: 'SIMBUBALADA – Kota Batu',
-    template: '%s | SIMBUBALADA Kota Batu',
+    default: 'SIBUMBALUBA – Kota Batu',
+    template: '%s | SIBUMBALUBA Kota Batu',
   },
   description:
     'Sistem Informasi Monitoring, Evaluasi, Pembinaan, Pengelolaan dan Seleksi BUMD-BLUD Kota Batu',
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'id_ID',
-    title: 'SIMBUBALADA – Kota Batu',
+    title: 'SIBUMBALUBA – Kota Batu',
     description:
       'Sistem Informasi Monitoring, Evaluasi, Pembinaan, Pengelolaan dan Seleksi BUMD-BLUD Kota Batu',
   },
