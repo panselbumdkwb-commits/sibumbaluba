@@ -1,4 +1,4 @@
-# SIMBUBALADA
+# SIBUMBALUMBA
 
 **Sistem Informasi Monitoring, Evaluasi, Pembinaan, Pengelolaan dan Seleksi BUMD-BLUD Kota Batu**
 
@@ -70,7 +70,7 @@ Dikelola oleh Bagian Perekonomian dan Sumber Daya Alam, Sekretariat Daerah Kota 
 ## 📁 Struktur Proyek
 
 ```
-simbubalada/
+SIBUMBALUMBA/
 ├── app/
 │   ├── (public)/           # Halaman tanpa login
 │   │   ├── page.tsx        # Beranda
@@ -131,8 +131,8 @@ simbubalada/
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/pemkot-batu/simbubalada.git
-cd simbubalada
+git clone https://github.com/pemkot-batu/SIBUMBALUMBA.git
+cd SIBUMBALUMBA
 npm install
 ```
 
@@ -177,7 +177,7 @@ Buka [http://localhost:3000](http://localhost:3000)
 ### Langkah 3 — Buat User Super Admin
 
 1. Buka **Authentication → Users → Add User**
-2. Email: `superadmin@simbubalada.internal`
+2. Email: `superadmin@SIBUMBALUMBA.internal`
 3. Password: `Admin@SIMBU2025!` *(ganti setelah pertama login)*
 4. Centang **"Auto Confirm User"**
 5. Catat UUID user yang dibuat
@@ -218,8 +218,8 @@ SELECT * FROM v_statistik;
 ```bash
 git init
 git add .
-git commit -m "initial commit: SIMBUBALADA v1.0"
-git remote add origin https://github.com/org/simbubalada.git
+git commit -m "initial commit: SIBUMBALUMBA v1.0"
+git remote add origin https://github.com/org/SIBUMBALUMBA.git
 git push -u origin main
 ```
 
@@ -245,7 +245,7 @@ Klik **Deploy** — Vercel otomatis build dan deploy.
 
 Di **Project Settings → Domains**, tambahkan:
 ```
-simbubalada.kotabatu.go.id
+SIBUMBALUMBA.kotabatu.go.id
 ```
 
 ---
@@ -291,8 +291,8 @@ simbubalada.kotabatu.go.id
 Sekretariat Daerah Kota Batu
 Jl. Panglima Sudirman No. 507, Kota Batu 65311
 Telp: (0341) 591024
-Email: simbubalada@kotabatu.go.id
+Email: SIBUMBALUMBA@kotabatu.go.id
 
 ---
 
-*SIMBUBALADA v1.0 — © 2025 Pemerintah Kota Batu*
+*SIBUMBALUMBA v1.0 — © 2025 Pemerintah Kota Batu*
