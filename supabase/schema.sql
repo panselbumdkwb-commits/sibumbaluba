@@ -1,5 +1,5 @@
 -- ============================================================
--- SIMBUBALADA - Sistem Informasi Monitoring, Evaluasi,
+-- SIBUMBALUMBA - Sistem Informasi Monitoring, Evaluasi,
 -- Pembinaan, Pengelolaan dan Seleksi BUMD-BLUD Kota Batu
 -- Supabase PostgreSQL Schema
 -- ============================================================
