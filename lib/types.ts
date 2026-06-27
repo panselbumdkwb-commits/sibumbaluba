@@ -1,5 +1,5 @@
 // lib/types.ts
-// SIBUMBALUBA - TypeScript Type Definitions
+// SIBUMBALUMBA - TypeScript Type Definitions
 
 export type RoleName = 'super_admin' | 'admin_bumd' | 'admin_blud' | 'tim_seleksi' | 'viewer'
 
