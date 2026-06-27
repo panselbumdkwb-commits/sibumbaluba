@@ -103,7 +103,7 @@ export default function PortalPesertaLoginPage() {
           </div>
         </div>
         <p className="text-center text-xs text-muted-foreground mt-4">
-          © {new Date().getFullYear()} Pemerintah Kota Batu — SIMBUBALADA
+          © {new Date().getFullYear()} Pemerintah Kota Batu — SIBUMBALUMBA
         </p>
       </div>
     </div>
