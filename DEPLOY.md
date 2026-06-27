@@ -1,4 +1,4 @@
-# PANDUAN DEPLOY SIMBUBALADA
+# PANDUAN DEPLOY SIBUMBALUMBA
 ## Step-by-Step: Supabase + GitHub + Vercel
 
 ---
@@ -7,7 +7,7 @@
 
 ### 1.1 Buat Project
 1. Buka https://supabase.com → Login → **New Project**
-2. Isi nama project: `simbubalada`
+2. Isi nama project: `SIBUMBALUMBA`
 3. Pilih region: **Southeast Asia (Singapore)**
 4. Buat password database (simpan baik-baik!)
 5. Klik **Create new project** → tunggu ~2 menit
@@ -50,7 +50,7 @@
 ### 1.6 Buat User Super Admin
 1. Buka **Authentication** → **Users** → **Add user** → **Create new user**
 2. Isi:
-   - Email: `superadmin@simbubalada.internal`
+   - Email: `superadmin@SIBUMBALUMBA.internal`
    - Password: `Admin@SIMBU2025!`
    - ☑ Auto Confirm User
 3. Klik **Create user**
@@ -62,7 +62,7 @@
    VALUES (
      'PASTE-UUID-DISINI',
      'superadmin',
-     'Super Administrator SIMBUBALADA',
+     'Super Administrator SIBUMBALUMBA',
      '00000000-0000-0000-0000-000000000001',
      true
    );
@@ -80,15 +80,15 @@
 
 ### 2.1 Buat Repository
 1. Buka https://github.com → **New repository**
-2. Nama: `simbubalada`
+2. Nama: `SIBUMBALUMBA`
 3. Visibility: **Private** (disarankan)
 4. Klik **Create repository**
 
 ### 2.2 Upload Kode
 ```bash
 # Extract ZIP yang didownload
-unzip simbubalada-v1.0.zip
-cd simbubalada
+unzip SIBUMBALUMBA-v1.0.zip
+cd SIBUMBALUMBA
 
 # Buat file .env.local dari template
 cp .env.example .env.local
@@ -97,9 +97,9 @@ cp .env.example .env.local
 # Init git dan push
 git init
 git add .
-git commit -m "feat: SIMBUBALADA v1.0 initial commit"
+git commit -m "feat: SIBUMBALUMBA v1.0 initial commit"
 git branch -M main
-git remote add origin https://github.com/USERNAME/simbubalada.git
+git remote add origin https://github.com/USERNAME/SIBUMBALUMBA.git
 git push -u origin main
 ```
 
@@ -110,7 +110,7 @@ git push -u origin main
 ### 3.1 Import Project
 1. Buka https://vercel.com → Login
 2. Klik **Add New** → **Project**
-3. Pilih repository `simbubalada` dari GitHub
+3. Pilih repository `SIBUMBALUMBA` dari GitHub
 4. Framework: **Next.js** (otomatis terdeteksi)
 
 ### 3.2 Set Environment Variables
@@ -127,7 +127,7 @@ Di halaman **Configure Project** → **Environment Variables**:
 ### 3.3 Deploy
 1. Klik **Deploy**
 2. Tunggu proses build (~3-5 menit)
-3. Jika sukses → URL Vercel akan muncul (misal: `simbubalada.vercel.app`)
+3. Jika sukses → URL Vercel akan muncul (misal: `SIBUMBALUMBA.vercel.app`)
 
 ### 3.4 Verifikasi Deploy
 Buka URL Vercel dan cek:
@@ -143,10 +143,10 @@ Buka URL Vercel dan cek:
 
 ### 4.1 Update Supabase Auth Settings
 1. Supabase Dashboard → **Authentication** → **URL Configuration**
-2. Isi **Site URL**: `https://simbubalada.vercel.app`
+2. Isi **Site URL**: `https://SIBUMBALUMBA.vercel.app`
 3. Tambah **Redirect URLs**:
    ```
-   https://simbubalada.vercel.app/**
+   https://SIBUMBALUMBA.vercel.app/**
    ```
 
 ### 4.2 Ganti Password Default
@@ -167,11 +167,11 @@ Login sebagai superadmin → `/users` → Tambah Pengguna:
 ### 4.4 Custom Domain (Opsional)
 Vercel Dashboard → Project → **Settings** → **Domains**:
 ```
-simbubalada.kotabatu.go.id
+SIBUMBALUMBA.kotabatu.go.id
 ```
 Tambah DNS CNAME record di pengelola domain:
 ```
-CNAME simbubalada → cname.vercel-dns.com
+CNAME SIBUMBALUMBA → cname.vercel-dns.com
 ```
 
 ---
@@ -220,4 +220,4 @@ Jalankan `fix-security-definer-view.sql` di SQL Editor
 
 ---
 
-*SIMBUBALADA v1.0 — Pemerintah Kota Batu © 2025*
+*SIBUMBALUMBA v1.0 — Pemerintah Kota Batu © 2025*
