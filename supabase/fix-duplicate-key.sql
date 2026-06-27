@@ -1,5 +1,5 @@
 -- ============================================================
--- SIMBUBALADA - Fix Duplicate Key Error
+-- SIBUMBALUMBA - Fix Duplicate Key Error
 -- Jalankan ini jika muncul error:
 --   "duplicate key value violates unique constraint bumd_slug_key"
 --   "duplicate key value violates unique constraint blud_slug_key"
