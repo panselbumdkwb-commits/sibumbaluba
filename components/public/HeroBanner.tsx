@@ -42,7 +42,7 @@ export default function HeroBanner() {
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-3">
             <Link
-              href="/seleksi"
+              href="/kelola/seleksi"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all shadow-sm hover:shadow-md"
             >
               Lihat Seleksi Aktif

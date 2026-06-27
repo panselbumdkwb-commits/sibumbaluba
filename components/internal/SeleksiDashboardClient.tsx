@@ -1,8 +1,7 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Users, CheckCircle2, XCircle, Eye, FileText,
@@ -126,7 +125,7 @@ export default function SeleksiDashboardClient({ seleksi, peserta: initialPesert
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <button onClick={() => router.push('/seleksi')}
+          <button onClick={() => router.push('/kelola/seleksi')}
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-2 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Daftar Seleksi
           </button>

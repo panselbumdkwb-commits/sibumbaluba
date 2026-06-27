@@ -1,8 +1,7 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 
-import { useState } from 'react'
 import { Search, Download, Pencil, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase-client'

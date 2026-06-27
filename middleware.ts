@@ -35,8 +35,8 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/pengumuman/kelola') ||
     pathname.startsWith('/users') ||
     pathname.startsWith('/laporan') ||
-    pathname.startsWith('/seleksi/baru') ||
-    /^\/seleksi\/[^/]+$/.test(pathname) // /seleksi/[id]
+    pathname.startsWith('/kelola/seleksi/baru') ||
+    /^\/kelola\/seleksi\/[^/]+$/.test(pathname) // /kelola/seleksi/[id]
 
   if (isInternalRoute && !user) {
     return NextResponse.redirect(new URL('/login', request.url))

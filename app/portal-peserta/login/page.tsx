@@ -51,7 +51,7 @@ export default function PortalPesertaLoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-secondary/10 via-background to-primary/10 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <Link href="/seleksi"
+        <Link href="/kelola/seleksi"
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
           <ArrowLeft className="h-4 w-4" /> Kembali ke Info Seleksi
         </Link>
@@ -96,7 +96,7 @@ export default function PortalPesertaLoginPage() {
           <div className="mt-6 pt-6 border-t border-border text-center">
             <p className="text-xs text-muted-foreground">
               Belum punya akun?{' '}
-              <Link href="/seleksi" className="text-primary font-medium hover:underline">
+              <Link href="/kelola/seleksi" className="text-primary font-medium hover:underline">
                 Daftar Seleksi
               </Link>
             </p>

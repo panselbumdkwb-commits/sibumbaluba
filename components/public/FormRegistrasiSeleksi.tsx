@@ -1,8 +1,7 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Loader2, UserPlus, CheckCircle2, X, Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'

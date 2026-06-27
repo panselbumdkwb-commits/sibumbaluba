@@ -67,7 +67,7 @@ export default async function DashboardPage() {
               <CardTitle className="text-base flex items-center gap-2">
                 <Users className="h-4 w-4 text-primary" /> Seleksi Terbaru
               </CardTitle>
-              <a href="/seleksi" className="text-xs text-primary hover:underline">Lihat Semua →</a>
+              <a href="/kelola/seleksi" className="text-xs text-primary hover:underline">Lihat Semua →</a>
             </div>
           </CardHeader>
           <CardContent>

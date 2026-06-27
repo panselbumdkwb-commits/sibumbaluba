@@ -1,7 +1,6 @@
 'use client'
 
-import React from 'react'
-
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -11,7 +10,6 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { User, RoleName } from '@/lib/types'
-import { useState } from 'react'
 
 interface NavItem {
   label: string
@@ -24,7 +22,7 @@ const NAV: NavItem[] = [
   { label: 'Dashboard',        href: '/dashboard',        icon: LayoutDashboard },
   { label: 'Monitoring BUMD',  href: '/monev/bumd',       icon: Building2,   roles: ['super_admin','admin_bumd'] },
   { label: 'Monitoring BLUD',  href: '/monev/blud',       icon: Hospital,    roles: ['super_admin','admin_blud'] },
-  { label: 'Seleksi',          href: '/seleksi',          icon: UserCheck,   roles: ['super_admin','tim_seleksi'] },
+  { label: 'Seleksi',          href: '/kelola/seleksi',   icon: UserCheck,   roles: ['super_admin','tim_seleksi'] },
   { label: 'Regulasi',         href: '/regulasi/kelola',  icon: FileText },
   { label: 'SOP',              href: '/sop/kelola',       icon: BookOpen },
   { label: 'Pengumuman',       href: '/pengumuman/kelola',icon: Bell },

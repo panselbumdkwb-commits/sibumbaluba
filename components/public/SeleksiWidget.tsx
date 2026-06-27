@@ -15,7 +15,7 @@ export default function SeleksiWidget({ seleksi }: Props) {
           <Users className="h-5 w-5 text-secondary" />
           <h2 className="text-lg font-bold">Seleksi Aktif</h2>
         </div>
-        <Link href="/seleksi"
+        <Link href="/kelola/seleksi"
           className="text-sm text-primary flex items-center gap-1 hover:underline">
           Semua <ArrowRight className="h-3 w-3" />
         </Link>
