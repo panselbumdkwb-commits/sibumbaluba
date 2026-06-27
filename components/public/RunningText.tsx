@@ -1,29 +1,21 @@
 'use client'
 
-import { Volume2 } from 'lucide-react'
+import { Radio } from 'lucide-react'
 
-interface RunningTextProps {
-  items: string[]
-}
+interface Props { items: string[] }
 
-export default function RunningText({ items }: RunningTextProps) {
-  const text = items.join('  ◆  ')
-  // Duplicate for seamless loop
-  const doubled = text + '  ◆  ' + text
+export default function RunningText({ items }: Props) {
+  const text = items.join('   ◆   ')
+  const doubled = text + '   ◆   ' + text
 
   return (
-    <div className="bg-primary text-primary-foreground flex items-center overflow-hidden h-9">
-      <div className="flex items-center gap-2 px-4 shrink-0 bg-primary/80 border-r border-white/20 h-full">
-        <Volume2 className="h-3.5 w-3.5" />
-        <span className="text-xs font-bold tracking-widest uppercase whitespace-nowrap">
-          Info
-        </span>
+    <div className="h-9 flex items-center overflow-hidden bg-gradient-to-r from-[hsl(213,85%,30%)] to-[hsl(213,75%,38%)] text-white">
+      <div className="flex items-center gap-2.5 px-4 shrink-0 border-r border-white/20 h-full bg-white/5">
+        <Radio className="h-3.5 w-3.5 text-white/90" />
+        <span className="text-[10px] font-black uppercase tracking-[0.15em] whitespace-nowrap text-white/90">Siaran</span>
       </div>
       <div className="flex-1 overflow-hidden">
-        <div
-          className="inline-block whitespace-nowrap animate-marquee text-sm py-2 px-4"
-          aria-live="polite"
-        >
+        <div className="inline-block whitespace-nowrap animate-marquee text-[12px] font-medium px-6 text-white/90 tracking-wide">
           {doubled}
         </div>
       </div>

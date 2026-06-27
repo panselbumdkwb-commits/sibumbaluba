@@ -92,3 +92,16 @@
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+/* Additional design refinements */
+@layer utilities {
+  .bg-primary\/8 {
+    background-color: hsl(var(--primary) / 0.08);
+  }
+  .h-4\.5 {
+    height: 1.125rem;
+  }
+  .w-4\.5 {
+    width: 1.125rem;
+  }
+}

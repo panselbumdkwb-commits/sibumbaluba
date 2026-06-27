@@ -1,59 +1,68 @@
 import Link from 'next/link'
-import { Shield, MapPin, Phone, Mail, ExternalLink } from 'lucide-react'
+import { Shield, MapPin, Phone, Mail, ExternalLink, ArrowUpRight } from 'lucide-react'
+
+const MENU_LINKS = [
+  ['Beranda', '/'],
+  ['Profil BUMD', '/profil/bumd'],
+  ['Profil BLUD', '/profil/blud'],
+  ['Regulasi', '/regulasi'],
+  ['SOP', '/sop'],
+  ['Pengumuman', '/pengumuman'],
+  ['Seleksi Direksi', '/seleksi'],
+  ['Kontak', '/kontak'],
+]
+
+const EXTERNAL_LINKS = [
+  ['Pemkot Batu', 'https://www.kotabatu.go.id'],
+  ['Perumdam Among Tani', '#'],
+  ['PT Batu Wisata Resources', '#'],
+  ['Dinkes Kota Batu', '#'],
+  ['BPKAD Kota Batu', '#'],
+]
 
 export default function PublicFooter() {
   return (
     <footer className="border-t border-border bg-card">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center">
-                <Shield className="h-5 w-5 text-primary-foreground" />
+      <div className="container mx-auto px-4 py-14">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
+          {/* Brand col */}
+          <div className="md:col-span-5">
+            <Link href="/" className="inline-flex items-center gap-3 mb-5">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-[hsl(213,85%,30%)] flex items-center justify-center shadow-sm">
+                <Shield className="h-5 w-5 text-white" />
               </div>
               <div>
-                <div className="font-bold text-foreground">SIMBUBALADA</div>
-                <div className="text-xs text-muted-foreground">Kota Batu</div>
+                <div className="font-bold text-base text-foreground tracking-tight">SIMBUBALADA</div>
+                <div className="text-[11px] text-muted-foreground font-medium">Kota Batu</div>
               </div>
-            </div>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
-              Sistem Informasi Monitoring, Evaluasi, Pembinaan, Pengelolaan dan
-              Seleksi BUMD-BLUD Kota Batu — dikelola oleh Bagian Perekonomian dan SDA
-              Sekretariat Daerah Kota Batu.
+            </Link>
+
+            <p className="text-[13px] text-muted-foreground leading-relaxed mb-6 max-w-sm">
+              Sistem Informasi Monitoring, Evaluasi, Pembinaan, Pengelolaan dan Seleksi
+              BUMD-BLUD — dikelola oleh Bagian Perekonomian dan SDA Sekretariat Daerah Kota Batu.
             </p>
-            <div className="mt-4 space-y-2 text-sm text-muted-foreground">
-              <div className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
-                <span>Jl. Panglima Sudirman No. 507, Kota Batu, Jawa Timur 65311</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 shrink-0 text-primary" />
-                <span>(0341) 591024</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 shrink-0 text-primary" />
-                <span>simbubalada@kotabatu.go.id</span>
-              </div>
+
+            <div className="space-y-2.5">
+              {[
+                { icon: MapPin, text: 'Jl. Panglima Sudirman No. 507, Kota Batu, Jawa Timur 65311' },
+                { icon: Phone, text: '(0341) 591024' },
+                { icon: Mail, text: 'simbubalada@kotabatu.go.id' },
+              ].map(({ icon: Icon, text }) => (
+                <div key={text} className="flex items-start gap-2.5 text-[13px] text-muted-foreground">
+                  <Icon className="h-3.5 w-3.5 mt-0.5 shrink-0 text-primary/70" />
+                  <span className="leading-relaxed">{text}</span>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Links */}
-          <div>
-            <h4 className="font-semibold text-sm mb-4">Menu Utama</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              {[
-                ['Beranda', '/'],
-                ['Profil BUMD', '/profil/bumd'],
-                ['Profil BLUD', '/profil/blud'],
-                ['Regulasi', '/regulasi'],
-                ['SOP', '/sop'],
-                ['Pengumuman', '/pengumuman'],
-                ['Seleksi', '/seleksi'],
-                ['Kontak', '/kontak'],
-              ].map(([label, href]) => (
+          {/* Menu col */}
+          <div className="md:col-span-3">
+            <div className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground/70 mb-4">Menu Utama</div>
+            <ul className="space-y-2.5">
+              {MENU_LINKS.map(([label, href]) => (
                 <li key={href}>
-                  <Link href={href} className="hover:text-primary transition-colors">
+                  <Link href={href} className="text-[13px] text-muted-foreground hover:text-primary transition-colors font-medium">
                     {label}
                   </Link>
                 </li>
@@ -61,37 +70,43 @@ export default function PublicFooter() {
             </ul>
           </div>
 
-          {/* External */}
-          <div>
-            <h4 className="font-semibold text-sm mb-4">Tautan Terkait</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              {[
-                ['Pemkot Batu', 'https://www.kotabatu.go.id'],
-                ['Perumdam Among Tani', '#'],
-                ['PT Batu Wisata Resources', '#'],
-                ['Dinkes Kota Batu', '#'],
-                ['BPKAD Kota Batu', '#'],
-              ].map(([label, href]) => (
+          {/* External col */}
+          <div className="md:col-span-4">
+            <div className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground/70 mb-4">Tautan Terkait</div>
+            <ul className="space-y-2.5">
+              {EXTERNAL_LINKS.map(([label, href]) => (
                 <li key={label}>
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 hover:text-primary transition-colors"
-                  >
+                  <a href={href} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-primary transition-colors font-medium group">
                     {label}
-                    <ExternalLink className="h-3 w-3" />
+                    <ArrowUpRight className="h-3 w-3 opacity-0 -translate-y-0.5 group-hover:opacity-100 group-hover:translate-y-0 transition-all" />
                   </a>
                 </li>
               ))}
             </ul>
+
+            {/* Login card */}
+            <div className="mt-8 rounded-xl border border-primary/15 bg-primary/5 p-4">
+              <div className="text-xs font-semibold text-foreground mb-1">Login Internal</div>
+              <div className="text-[11px] text-muted-foreground mb-3">Akses dashboard pengelolaan BUMD-BLUD</div>
+              <Link href="/login"
+                className="inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-primary/80 transition-colors">
+                Masuk ke Sistem <ExternalLink className="h-3 w-3" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-      <div className="border-t border-border bg-muted/30">
-        <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} Pemerintah Kota Batu. Hak cipta dilindungi.</span>
-          <span>SIMBUBALADA v1.0 — Dibangun dengan Next.js & Supabase</span>
+
+      {/* Bottom bar */}
+      <div className="border-t border-border/60 bg-muted/20">
+        <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span className="text-[11px] text-muted-foreground">
+            © {new Date().getFullYear()} Pemerintah Kota Batu. Hak cipta dilindungi.
+          </span>
+          <span className="text-[11px] text-muted-foreground">
+            SIMBUBALADA v1.1 — Dibangun dengan Next.js & Supabase
+          </span>
         </div>
       </div>
     </footer>
