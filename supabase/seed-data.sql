@@ -1,5 +1,5 @@
 -- ============================================================
--- SIMBUBALADA - Complete Seed Data
+-- SIBUMBALUMBA - Complete Seed Data
 -- Jalankan di Supabase SQL Editor SETELAH schema.sql
 -- Aman dijalankan ulang (ON CONFLICT DO NOTHING)
 -- ============================================================
@@ -244,7 +244,7 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO pengumuman (id, judul, isi, kategori, is_publik) VALUES
 (
   '11111111-0001-0000-0000-000000000000',
-  'Selamat Datang di SIMBUBALADA Kota Batu',
+  'Selamat Datang di SIBUMBALUMBA Kota Batu',
   'Sistem Informasi Monitoring, Evaluasi, Pembinaan, Pengelolaan dan Seleksi BUMD-BLUD Kota Batu telah resmi diluncurkan. Sistem ini bertujuan untuk meningkatkan transparansi dan akuntabilitas pengelolaan BUMD dan BLUD di Kota Batu. Masyarakat dapat mengakses informasi profil, regulasi, SOP, dan pengumuman seleksi melalui portal ini.',
   'umum',
   true
