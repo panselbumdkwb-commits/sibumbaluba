@@ -1,5 +1,5 @@
 -- ============================================================
--- SIMBUBALADA - Hotfix: Security Definer View
+-- SIBUMBALUMBA - Hotfix: Security Definer View
 -- Jalankan di Supabase SQL Editor jika sudah deploy schema lama
 --
 -- Error yang diperbaiki:
