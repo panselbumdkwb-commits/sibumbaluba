@@ -42,7 +42,6 @@ export default function UsersClient({ users: initial, roles }: Props) {
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
 
-  // ── Buat user baru ─────────────────────────────────────────
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
     if (!form.username || !form.password || !form.role_id) { toast.error('Lengkapi semua field'); return }
@@ -64,7 +63,6 @@ export default function UsersClient({ users: initial, roles }: Props) {
     finally { setLoading(false) }
   }
 
-  // ── Edit user ──────────────────────────────────────────────
   function openEdit(u: UserRow) {
     setEditUser(u)
     const roleObj = roles.find(r => r.name === u.role?.name)
@@ -91,7 +89,6 @@ export default function UsersClient({ users: initial, roles }: Props) {
     finally { setLoading(false) }
   }
 
-  // ── Hapus user ─────────────────────────────────────────────
   async function handleDelete() {
     if (!deleteUser) return
     setLoading(true)
@@ -110,7 +107,6 @@ export default function UsersClient({ users: initial, roles }: Props) {
     finally { setLoading(false) }
   }
 
-  // ── Toggle aktif ───────────────────────────────────────────
   async function toggleActive(userId: string, isActive: boolean) {
     const supabase = createClient()
     const { error } = await supabase.from('users').update({ is_active: !isActive }).eq('id', userId)
@@ -131,7 +127,6 @@ export default function UsersClient({ users: initial, roles }: Props) {
         </button>
       </div>
 
-      {/* Form Tambah */}
       {showForm && (
         <div className="bg-card border border-border rounded-xl p-6">
           <h2 className="font-bold mb-4 flex items-center gap-2">
@@ -180,7 +175,6 @@ export default function UsersClient({ users: initial, roles }: Props) {
         </div>
       )}
 
-      {/* Tabel User */}
       <div className="bg-card border border-border rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -237,7 +231,6 @@ export default function UsersClient({ users: initial, roles }: Props) {
         </div>
       </div>
 
-      {/* Modal Edit */}
       {editUser && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-card rounded-xl border border-border w-full max-w-md shadow-xl">
@@ -298,7 +291,6 @@ export default function UsersClient({ users: initial, roles }: Props) {
         </div>
       )}
 
-      {/* Modal Konfirmasi Hapus */}
       {deleteUser && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-card rounded-xl border border-border w-full max-w-sm shadow-xl p-6">
