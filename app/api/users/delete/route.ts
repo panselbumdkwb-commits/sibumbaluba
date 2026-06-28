@@ -7,14 +7,17 @@ export async function DELETE(req: Request) {
     const { data: { user } } = await serverClient.auth.getUser()
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const { data: me } = await serverClient.from('users').select('role:roles(name)').eq('id', user.id).single()
+    const { data: me } = await serverClient
+      .from('users').select('role:roles(name)').eq('id', user.id).single()
     if ((me?.role as { name?: string } | null)?.name !== 'super_admin') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const { id } = await req.json()
     if (!id) return NextResponse.json({ error: 'ID wajib diisi' }, { status: 400 })
-    if (id === user.id) return NextResponse.json({ error: 'Tidak dapat menghapus akun sendiri' }, { status: 400 })
+    if (id === user.id) {
+      return NextResponse.json({ error: 'Tidak dapat menghapus akun sendiri' }, { status: 400 })
+    }
 
     const supabase = await createServiceClient()
 
