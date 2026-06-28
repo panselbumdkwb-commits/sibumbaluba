@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  LayoutDashboard, BarChart3, FileText, BookOpen, Bell,
+  LayoutDashboard, FileText, BookOpen, Bell,
   Users, UserCheck, FileBarChart, Shield, Building2, Hospital,
   ChevronRight, X, Settings
 } from 'lucide-react'
@@ -19,15 +19,15 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { label: 'Dashboard',        href: '/dashboard',          icon: LayoutDashboard },
-  { label: 'Monitoring BUMD',  href: '/monev/bumd',         icon: Building2,   roles: ['super_admin','admin_bumd','admin_bpsda'] },
-  { label: 'Monitoring BLUD',  href: '/monev/blud',         icon: Hospital,    roles: ['super_admin','admin_blud','admin_bpsda'] },
-  { label: 'Seleksi',          href: '/kelola/seleksi',     icon: UserCheck,   roles: ['super_admin','panitia_seleksi','tim_ukk','tim_seleksi'] },
-  { label: 'Pengumuman',       href: '/pengumuman/kelola',  icon: Bell,        roles: ['super_admin','panitia_seleksi','tim_seleksi'] },
-  { label: 'Regulasi',         href: '/regulasi/kelola',    icon: FileText,    roles: ['super_admin'] },
-  { label: 'SOP',              href: '/sop/kelola',         icon: BookOpen,    roles: ['super_admin'] },
-  { label: 'Laporan',          href: '/laporan',            icon: FileBarChart,roles: ['super_admin','admin_bumd','admin_blud'] },
-  { label: 'Manajemen User',   href: '/users',              icon: Users,       roles: ['super_admin'] },
+  { label: 'Dashboard',       href: '/dashboard',          icon: LayoutDashboard },
+  { label: 'Monitoring BUMD', href: '/monev/bumd',         icon: Building2,   roles: ['super_admin','admin_bumd','admin_bpsda'] },
+  { label: 'Monitoring BLUD', href: '/monev/blud',         icon: Hospital,    roles: ['super_admin','admin_blud','admin_bpsda'] },
+  { label: 'Seleksi',         href: '/kelola/seleksi',     icon: UserCheck,   roles: ['super_admin','panitia_seleksi','tim_ukk','tim_seleksi'] },
+  { label: 'Pengumuman',      href: '/pengumuman/kelola',  icon: Bell,        roles: ['super_admin','panitia_seleksi','tim_seleksi'] },
+  { label: 'Regulasi',        href: '/regulasi/kelola',    icon: FileText,    roles: ['super_admin'] },
+  { label: 'SOP',             href: '/sop/kelola',         icon: BookOpen,    roles: ['super_admin'] },
+  { label: 'Laporan',         href: '/laporan',            icon: FileBarChart,roles: ['super_admin','admin_bumd','admin_blud'] },
+  { label: 'Manajemen User',  href: '/users',              icon: Users,       roles: ['super_admin'] },
 ]
 
 interface NavLinkProps { item: NavItem; role: RoleName; collapsed: boolean }
@@ -99,7 +99,7 @@ export default function InternalSidebar({ user }: Props) {
         ))}
       </nav>
 
-      {/* User info + Ganti Password */}
+      {/* User info + Pengaturan Akun */}
       {!collapsed && (
         <div className="p-3 border-t border-border space-y-2">
           <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-muted">
