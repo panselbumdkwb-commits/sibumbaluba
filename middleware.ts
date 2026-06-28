@@ -51,16 +51,15 @@ export async function middleware(request: NextRequest) {
 
     const role = (userData?.role as { name?: string } | null)?.name ?? 'viewer'
 
-    // Aturan akses per route
     const roleRouteRules: Record<string, string[]> = {
       '/regulasi/kelola':   ['super_admin'],
       '/sop/kelola':        ['super_admin'],
       '/users':             ['super_admin'],
-      '/monev/bumd':        ['super_admin','admin_bumd','admin_bpsda'],
-      '/monev/blud':        ['super_admin','admin_blud','admin_bpsda'],
-      '/kelola/seleksi':    ['super_admin','panitia_seleksi','tim_ukk','tim_seleksi'],
-      '/pengumuman/kelola': ['super_admin','panitia_seleksi','tim_seleksi'],
-      '/laporan':           ['super_admin','admin_bumd','admin_blud'],
+      '/monev/bumd':        ['super_admin', 'admin_bumd', 'admin_bpsda'],
+      '/monev/blud':        ['super_admin', 'admin_blud', 'admin_bpsda'],
+      '/kelola/seleksi':    ['super_admin', 'panitia_seleksi', 'tim_ukk', 'tim_seleksi'],
+      '/pengumuman/kelola': ['super_admin', 'panitia_seleksi', 'tim_seleksi'],
+      '/laporan':           ['super_admin', 'admin_bumd', 'admin_blud'],
     }
 
     for (const [route, allowedRoles] of Object.entries(roleRouteRules)) {
