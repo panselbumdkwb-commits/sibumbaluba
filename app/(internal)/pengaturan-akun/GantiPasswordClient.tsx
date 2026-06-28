@@ -76,8 +76,8 @@ export default function GantiPasswordClient() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {[
-          { key: 'password_lama', label: 'Password Lama', showKey: 'lama' as const },
-          { key: 'password_baru', label: 'Password Baru', showKey: 'baru' as const },
+          { key: 'password_lama', label: 'Password Lama',            showKey: 'lama'      as const },
+          { key: 'password_baru', label: 'Password Baru',            showKey: 'baru'      as const },
           { key: 'konfirmasi',    label: 'Konfirmasi Password Baru', showKey: 'konfirmasi' as const },
         ].map(({ key, label, showKey }) => (
           <div key={key}>
@@ -110,7 +110,10 @@ export default function GantiPasswordClient() {
             disabled={loading}
             className="w-full h-10 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 disabled:opacity-60 transition-all flex items-center justify-center gap-2"
           >
-            {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Menyimpan...</> : 'Simpan Password Baru'}
+            {loading
+              ? <><Loader2 className="h-4 w-4 animate-spin" /> Menyimpan...</>
+              : 'Simpan Password Baru'
+            }
           </button>
         </div>
       </form>
