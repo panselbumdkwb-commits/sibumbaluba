@@ -22,7 +22,6 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // PENTING: selalu panggil getUser() agar session ter-refresh
   const { data: { user } } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
 
@@ -35,11 +34,40 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/pengumuman/kelola') ||
     pathname.startsWith('/users') ||
     pathname.startsWith('/laporan') ||
-    pathname.startsWith('/kelola/seleksi/baru') ||
-    /^\/kelola\/seleksi\/[^/]+$/.test(pathname) // /kelola/seleksi/[id]
+    pathname.startsWith('/kelola/seleksi') ||
+    pathname.startsWith('/pengaturan-akun')
 
   if (isInternalRoute && !user) {
     return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  // ── Proteksi route berdasarkan role ──────────────────────
+  if (isInternalRoute && user) {
+    const { data: userData } = await supabase
+      .from('users')
+      .select('role:roles(name)')
+      .eq('id', user.id)
+      .single()
+
+    const role = (userData?.role as { name?: string } | null)?.name ?? 'viewer'
+
+    // Aturan akses per route
+    const roleRouteRules: Record<string, string[]> = {
+      '/regulasi/kelola':   ['super_admin'],
+      '/sop/kelola':        ['super_admin'],
+      '/users':             ['super_admin'],
+      '/monev/bumd':        ['super_admin','admin_bumd','admin_bpsda'],
+      '/monev/blud':        ['super_admin','admin_blud','admin_bpsda'],
+      '/kelola/seleksi':    ['super_admin','panitia_seleksi','tim_ukk','tim_seleksi'],
+      '/pengumuman/kelola': ['super_admin','panitia_seleksi','tim_seleksi'],
+      '/laporan':           ['super_admin','admin_bumd','admin_blud'],
+    }
+
+    for (const [route, allowedRoles] of Object.entries(roleRouteRules)) {
+      if (pathname.startsWith(route) && !allowedRoles.includes(role)) {
+        return NextResponse.redirect(new URL('/dashboard', request.url))
+      }
+    }
   }
 
   // ── Route portal peserta ──────────────────────────────────

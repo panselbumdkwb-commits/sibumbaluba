@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, BarChart3, FileText, BookOpen, Bell,
   Users, UserCheck, FileBarChart, Shield, Building2, Hospital,
-  ChevronRight, X
+  ChevronRight, X, Settings
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { User, RoleName } from '@/lib/types'
@@ -19,15 +19,15 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { label: 'Dashboard',        href: '/dashboard',        icon: LayoutDashboard },
-  { label: 'Monitoring BUMD',  href: '/monev/bumd',       icon: Building2,   roles: ['super_admin','admin_bumd'] },
-  { label: 'Monitoring BLUD',  href: '/monev/blud',       icon: Hospital,    roles: ['super_admin','admin_blud'] },
-  { label: 'Seleksi',          href: '/kelola/seleksi',   icon: UserCheck,   roles: ['super_admin','tim_seleksi'] },
-  { label: 'Regulasi',         href: '/regulasi/kelola',  icon: FileText },
-  { label: 'SOP',              href: '/sop/kelola',       icon: BookOpen },
-  { label: 'Pengumuman',       href: '/pengumuman/kelola',icon: Bell },
-  { label: 'Laporan',          href: '/laporan',          icon: FileBarChart },
-  { label: 'Manajemen User',   href: '/users',            icon: Users,       roles: ['super_admin'] },
+  { label: 'Dashboard',        href: '/dashboard',          icon: LayoutDashboard },
+  { label: 'Monitoring BUMD',  href: '/monev/bumd',         icon: Building2,   roles: ['super_admin','admin_bumd','admin_bpsda'] },
+  { label: 'Monitoring BLUD',  href: '/monev/blud',         icon: Hospital,    roles: ['super_admin','admin_blud','admin_bpsda'] },
+  { label: 'Seleksi',          href: '/kelola/seleksi',     icon: UserCheck,   roles: ['super_admin','panitia_seleksi','tim_ukk','tim_seleksi'] },
+  { label: 'Pengumuman',       href: '/pengumuman/kelola',  icon: Bell,        roles: ['super_admin','panitia_seleksi','tim_seleksi'] },
+  { label: 'Regulasi',         href: '/regulasi/kelola',    icon: FileText,    roles: ['super_admin'] },
+  { label: 'SOP',              href: '/sop/kelola',         icon: BookOpen,    roles: ['super_admin'] },
+  { label: 'Laporan',          href: '/laporan',            icon: FileBarChart,roles: ['super_admin','admin_bumd','admin_blud'] },
+  { label: 'Manajemen User',   href: '/users',              icon: Users,       roles: ['super_admin'] },
 ]
 
 interface NavLinkProps { item: NavItem; role: RoleName; collapsed: boolean }
@@ -99,22 +99,29 @@ export default function InternalSidebar({ user }: Props) {
         ))}
       </nav>
 
-      {/* User info */}
+      {/* User info + Ganti Password */}
       {!collapsed && (
-        <div className="p-3 border-t border-border">
+        <div className="p-3 border-t border-border space-y-2">
           <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-muted">
             <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
               <span className="text-xs font-bold text-primary">
                 {(user.full_name ?? user.username).charAt(0).toUpperCase()}
               </span>
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <div className="text-xs font-semibold truncate">{user.full_name ?? user.username}</div>
               <div className="text-[10px] text-muted-foreground capitalize">
                 {role.replace(/_/g, ' ')}
               </div>
             </div>
           </div>
+          <Link
+            href="/pengaturan-akun"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          >
+            <Settings className="h-3.5 w-3.5" />
+            Pengaturan Akun
+          </Link>
         </div>
       )}
     </aside>
