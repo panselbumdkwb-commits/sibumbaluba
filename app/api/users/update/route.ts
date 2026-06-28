@@ -7,7 +7,8 @@ export async function PUT(req: Request) {
     const { data: { user } } = await serverClient.auth.getUser()
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const { data: me } = await serverClient.from('users').select('role:roles(name)').eq('id', user.id).single()
+    const { data: me } = await serverClient
+      .from('users').select('role:roles(name)').eq('id', user.id).single()
     if ((me?.role as { name?: string } | null)?.name !== 'super_admin') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
@@ -18,14 +19,17 @@ export async function PUT(req: Request) {
     const supabase = await createServiceClient()
 
     // Update tabel users
-    const { error: updateError } = await supabase.from('users')
+    const { error: updateError } = await supabase
+      .from('users')
       .update({ full_name: full_name || null, role_id: role_id || null })
       .eq('id', id)
     if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 })
 
     // Reset password jika diisi
     if (password) {
-      if (password.length < 8) return NextResponse.json({ error: 'Password minimal 8 karakter' }, { status: 400 })
+      if (password.length < 8) {
+        return NextResponse.json({ error: 'Password minimal 8 karakter' }, { status: 400 })
+      }
       const { error: pwError } = await supabase.auth.admin.updateUserById(id, { password })
       if (pwError) return NextResponse.json({ error: pwError.message }, { status: 500 })
     }
