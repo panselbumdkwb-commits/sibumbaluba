@@ -110,8 +110,32 @@ export interface TahapanSeleksi {
 export interface HasilSeleksi { id: string; peserta_id: string; tahapan_id: string; nilai: number | null; status: 'lulus' | 'tidak_lulus' | 'absen'; catatan: string | null; penilai: string | null; created_at: string; updated_at: string; peserta?: PesertaSeleksi; tahapan?: TahapanSeleksi }
 
 export interface PenilaianUkk {
-  id: string; hasil_id: string | null; tahapan_id: string; peserta_id: string; penilai_id: string
+  id: string
+  hasil_id: string | null
+  tahapan_id: string
+  peserta_id: string
+  penilai_id: string
   tipe_tahap: 'ujian_tulis' | 'presentasi' | 'wawancara'
-  nilai_tulis_pengetahuan_umum: number; nilai_tulis_manajemen: number; nilai_tulis_keuangan: number; nilai_tulis_total: number
-  nilai_presentasi_substansi: number; nilai_presentasi_inovasi: number; nilai_presentasi_komunikasi: number; nilai_presentasi_penguasaan: number; nilai_presentasi_total: number
-  nilai_wawancara_integritas: number; nilai_wawancara_kepemimpinan: number; nilai_wawancara_strategis: number; nilai_wawancara_komunikasi: number; nilai_wawancara_teknis: number; nilai_wawancara_total: number
+  nilai_tulis_pengetahuan_umum: number
+  nilai_tulis_manajemen: number
+  nilai_tulis_keuangan: number
+  nilai_tulis_total: number
+  nilai_presentasi_substansi: number
+  nilai_presentasi_inovasi: number
+  nilai_presentasi_komunikasi: number
+  nilai_presentasi_penguasaan: number
+  nilai_presentasi_total: number
+  nilai_wawancara_integritas: number
+  nilai_wawancara_kepemimpinan: number
+  nilai_wawancara_strategis: number
+  nilai_wawancara_komunikasi: number
+  nilai_wawancara_teknis: number
+  nilai_wawancara_total: number
+  nilai_akhir: number
+  catatan: string | null
+  status: 'draft' | 'final'
+  created_at: string
+  updated_at: string
+  peserta?: PesertaSeleksi
+  tahapan?: TahapanSeleksi
+}
