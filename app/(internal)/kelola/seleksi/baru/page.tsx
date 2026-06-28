@@ -34,7 +34,7 @@ export default function SeleksiBaru() {
   const [tahapan, setTahapan] = useState<Tahapan[]>([
     { nama_tahap: 'Seleksi Administrasi', urutan: 1, tanggal_mulai: '', tanggal_selesai: '' },
     { nama_tahap: 'Psikotes',             urutan: 2, tanggal_mulai: '', tanggal_selesai: '' },
-    { nama_tahap: 'Makalah',             urutan: 3, tanggal_mulai: '', tanggal_selesai: '' },
+    { nama_tahap: 'Tes Tulis',             urutan: 3, tanggal_mulai: '', tanggal_selesai: '' },
     { nama_tahap: 'Presentasi',          urutan: 4, tanggal_mulai: '', tanggal_selesai: '' },
     { nama_tahap: 'Wawancara',           urutan: 5, tanggal_mulai: '', tanggal_selesai: '' },
   ])
