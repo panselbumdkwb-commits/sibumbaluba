@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server'
-import { createServiceClient, createServerComponentClient } from '@/lib/supabase-server'
+import { createClient } from '@supabase/supabase-js'
+import { createServerComponentClient } from '@/lib/supabase-server'
 
 export async function DELETE(req: Request) {
   try {
+    // Verifikasi super_admin
     const serverClient = await createServerComponentClient()
     const { data: { user } } = await serverClient.auth.getUser()
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -19,14 +21,23 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: 'Tidak dapat menghapus akun sendiri' }, { status: 400 })
     }
 
-    const supabase = await createServiceClient()
+    // Gunakan admin client langsung
+    const adminClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    )
 
-    // Hapus dari auth (cascade ke tabel users via FK)
-    const { error } = await supabase.auth.admin.deleteUser(id)
+    // Hapus dari public.users dulu (manual karena FK)
+    await adminClient.from('users').delete().eq('id', id)
+
+    // Hapus dari auth.users
+    const { error } = await adminClient.auth.admin.deleteUser(id)
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
     return NextResponse.json({ success: true })
-  } catch {
-    return NextResponse.json({ error: 'Terjadi kesalahan server' }, { status: 500 })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Terjadi kesalahan server'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
