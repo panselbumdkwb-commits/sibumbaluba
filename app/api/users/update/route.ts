@@ -1,14 +1,35 @@
 import { NextResponse } from 'next/server'
-import { createServiceClient, createServerComponentClient } from '@/lib/supabase-server'
+import { createClient } from '@supabase/supabase-js'
+import { cookies } from 'next/headers'
+import { createServerClient } from '@supabase/ssr'
+
+async function getSessionUser() {
+  const cookieStore = await cookies()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll: () => cookieStore.getAll() } }
+  )
+  return supabase.auth.getUser()
+}
 
 export async function PUT(req: Request) {
   try {
-    const serverClient = await createServerComponentClient()
-    const { data: { user } } = await serverClient.auth.getUser()
+    const { data: { user } } = await getSessionUser()
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const { data: me } = await serverClient
-      .from('users').select('role:roles(name)').eq('id', user.id).single()
+    const adminClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    )
+
+    const { data: me } = await adminClient
+      .from('users')
+      .select('role:roles(name)')
+      .eq('id', user.id)
+      .single()
+
     if ((me?.role as { name?: string } | null)?.name !== 'super_admin') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
@@ -16,21 +37,17 @@ export async function PUT(req: Request) {
     const { id, full_name, role_id, password } = await req.json()
     if (!id) return NextResponse.json({ error: 'ID wajib diisi' }, { status: 400 })
 
-    const supabase = await createServiceClient()
-
-    // Update tabel users
-    const { error: updateError } = await supabase
+    const { error: updateError } = await adminClient
       .from('users')
       .update({ full_name: full_name || null, role_id: role_id || null })
       .eq('id', id)
     if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 })
 
-    // Reset password jika diisi
     if (password) {
       if (password.length < 8) {
         return NextResponse.json({ error: 'Password minimal 8 karakter' }, { status: 400 })
       }
-      const { error: pwError } = await supabase.auth.admin.updateUserById(id, { password })
+      const { error: pwError } = await adminClient.auth.admin.updateUserById(id, { password })
       if (pwError) return NextResponse.json({ error: pwError.message }, { status: 500 })
     }
 
