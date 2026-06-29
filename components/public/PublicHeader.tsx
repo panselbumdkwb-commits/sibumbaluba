@@ -98,10 +98,10 @@ export default function PublicHeader() {
                   <div key={item.label} className="relative"
                     onMouseEnter={() => setDropdown(item.label)}
                     onMouseLeave={() => setDropdown(null)}>
-                    <button className={cn(
-                      'flex items-center gap-1 px-3.5 py-2 rounded-md text-[13px] font-medium transition-all',
-                      'text-muted-foreground hover:text-foreground hover:bg-muted/60'
-                    )}>
+                    <button
+                      type="button"
+                      className="flex items-center gap-1 px-3.5 py-2 rounded-md text-[13px] font-medium transition-all text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                    >
                       {item.label}
                       <ChevronDown className={cn('h-3 w-3 transition-transform', dropdown === item.label && 'rotate-180')} />
                     </button>
@@ -130,10 +130,11 @@ export default function PublicHeader() {
               )}
             </nav>
 
-            {/* Right — hanya 1 tombol Login Internal + Portal Peserta */}
+            {/* Right — 1 Login Internal + 1 Portal Peserta */}
             <div className="flex items-center gap-2 shrink-0">
               {mounted && (
                 <button
+                  type="button"
                   onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                   className="h-9 w-9 flex items-center justify-center rounded-md border border-border hover:bg-muted transition-colors"
                   aria-label="Ganti tema"
@@ -152,6 +153,7 @@ export default function PublicHeader() {
                 Login Internal
               </Link>
               <button
+                type="button"
                 className="lg:hidden h-9 w-9 flex items-center justify-center rounded-md border border-border hover:bg-muted transition-colors"
                 onClick={() => setMobileOpen(!mobileOpen)}
                 aria-label="Menu"
@@ -170,7 +172,9 @@ export default function PublicHeader() {
             {NAV_ITEMS.map((item) =>
               item.children ? (
                 <div key={item.label}>
-                  <div className="px-3 pt-3 pb-1 text-[11px] uppercase tracking-widest font-bold text-muted-foreground/70">{item.label}</div>
+                  <div className="px-3 pt-3 pb-1 text-[11px] uppercase tracking-widest font-bold text-muted-foreground/70">
+                    {item.label}
+                  </div>
                   {item.children.map((child) => (
                     <Link key={child.href} href={child.href} onClick={() => setMobileOpen(false)}
                       className="block px-4 py-2.5 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
@@ -182,14 +186,15 @@ export default function PublicHeader() {
                 <Link key={item.href} href={item.href!} onClick={() => setMobileOpen(false)}
                   className={cn(
                     'block px-4 py-2.5 rounded-md text-sm font-medium transition-colors',
-                    pathname === item.href ? 'text-primary bg-primary/8 font-semibold' : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                    pathname === item.href
+                      ? 'text-primary bg-primary/8 font-semibold'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
                   )}>
                   {item.label}
                 </Link>
               )
             )}
-            {/* Mobile: Portal Peserta + Login Internal */}
-            <div className="pt-3 space-y-2">
+            <div className="pt-3 space-y-2 border-t border-border mt-2">
               <Link href="/portal-peserta/login" onClick={() => setMobileOpen(false)}
                 className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border border-border text-sm font-semibold hover:bg-muted/60 transition-colors">
                 <FileText className="h-4 w-4 text-secondary" /> Portal Peserta
