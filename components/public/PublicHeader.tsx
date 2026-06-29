@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Moon, Sun, Menu, X, Shield, ChevronDown, Building2 } from 'lucide-react'
+import { Moon, Sun, Menu, X, Shield, ChevronDown, Building2, FileText } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
 
@@ -30,8 +30,8 @@ function WIBClock() {
       const now = new Date()
       const wib = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }))
       const pad = (n: number) => String(n).padStart(2, '0')
-      const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des']
+      const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu']
+      const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des']
       setTime(`${days[wib.getDay()]}, ${wib.getDate()} ${months[wib.getMonth()]} ${wib.getFullYear()}  ${pad(wib.getHours())}:${pad(wib.getMinutes())}:${pad(wib.getSeconds())} WIB`)
     }
     tick()
@@ -95,12 +95,9 @@ export default function PublicHeader() {
             <nav className="hidden lg:flex items-center gap-0.5 flex-1 justify-center">
               {NAV_ITEMS.map((item) =>
                 item.children ? (
-                  <div
-                    key={item.label}
-                    className="relative"
+                  <div key={item.label} className="relative"
                     onMouseEnter={() => setDropdown(item.label)}
-                    onMouseLeave={() => setDropdown(null)}
-                  >
+                    onMouseLeave={() => setDropdown(null)}>
                     <button className={cn(
                       'flex items-center gap-1 px-3.5 py-2 rounded-md text-[13px] font-medium transition-all',
                       'text-muted-foreground hover:text-foreground hover:bg-muted/60'
@@ -111,11 +108,8 @@ export default function PublicHeader() {
                     {dropdown === item.label && (
                       <div className="absolute top-full left-0 mt-1.5 w-52 rounded-xl border border-border bg-background shadow-xl py-1.5 overflow-hidden">
                         {item.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            className="flex items-center gap-2 px-4 py-2.5 text-[13px] text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
-                          >
+                          <Link key={child.href} href={child.href}
+                            className="flex items-center gap-2 px-4 py-2.5 text-[13px] text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
                             {child.label}
                           </Link>
                         ))}
@@ -123,23 +117,20 @@ export default function PublicHeader() {
                     )}
                   </div>
                 ) : (
-                  <Link
-                    key={item.href}
-                    href={item.href!}
+                  <Link key={item.href} href={item.href!}
                     className={cn(
                       'px-3.5 py-2 rounded-md text-[13px] font-medium transition-all',
                       pathname === item.href
                         ? 'text-primary bg-primary/8 font-semibold'
                         : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
-                    )}
-                  >
+                    )}>
                     {item.label}
                   </Link>
                 )
               )}
             </nav>
 
-            {/* Right */}
+            {/* Right — hanya 1 tombol Login Internal + Portal Peserta */}
             <div className="flex items-center gap-2 shrink-0">
               {mounted && (
                 <button
@@ -150,10 +141,13 @@ export default function PublicHeader() {
                   {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 </button>
               )}
-              <Link
-                href="/login"
-                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-[13px] font-semibold hover:bg-primary/90 transition-all shadow-sm hover:shadow-md"
-              >
+              <Link href="/portal-peserta/login"
+                className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-border text-[13px] font-semibold text-foreground hover:bg-muted/60 transition-all">
+                <FileText className="h-3.5 w-3.5 text-secondary" />
+                Portal Peserta
+              </Link>
+              <Link href="/login"
+                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-[13px] font-semibold hover:bg-primary/90 transition-all shadow-sm hover:shadow-md">
                 <Shield className="h-3.5 w-3.5" />
                 Login Internal
               </Link>
@@ -194,10 +188,15 @@ export default function PublicHeader() {
                 </Link>
               )
             )}
-            <div className="pt-3">
+            {/* Mobile: Portal Peserta + Login Internal */}
+            <div className="pt-3 space-y-2">
+              <Link href="/portal-peserta/login" onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border border-border text-sm font-semibold hover:bg-muted/60 transition-colors">
+                <FileText className="h-4 w-4 text-secondary" /> Portal Peserta
+              </Link>
               <Link href="/login" onClick={() => setMobileOpen(false)}
                 className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors">
-                <Shield className="h-4 w-4" />Login Internal
+                <Shield className="h-4 w-4" /> Login Internal
               </Link>
             </div>
           </div>
