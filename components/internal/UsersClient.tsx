@@ -39,11 +39,11 @@ export default function UsersClient({ users: initial, roles }: Props) {
   const [editForm, setEditForm] = useState({ full_name: '', role_id: '', password: '' })
   const [showEditPw, setShowEditPw] = useState(false)
 
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-    setForm(f => ({ ...f, [k]: e.target.value }))
+  const setField = (k: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+      setForm(f => ({ ...f, [k]: e.target.value }))
 
-  async function handleCreate(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleCreate() {
     if (!form.username || !form.password || !form.role_id) { toast.error('Lengkapi semua field'); return }
     if (form.password.length < 8) { toast.error('Password minimal 8 karakter'); return }
     setLoading(true)
@@ -69,8 +69,7 @@ export default function UsersClient({ users: initial, roles }: Props) {
     setEditForm({ full_name: u.full_name ?? '', role_id: roleObj?.id ?? '', password: '' })
   }
 
-  async function handleEdit(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleEdit() {
     if (!editUser) return
     if (editForm.password && editForm.password.length < 8) { toast.error('Password minimal 8 karakter'); return }
     setLoading(true)
@@ -120,8 +119,11 @@ export default function UsersClient({ users: initial, roles }: Props) {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <button onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors">
+        <button
+          type="button"
+          onClick={() => setShowForm(!showForm)}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
+        >
           <UserPlus className="h-4 w-4" />
           {showForm ? 'Tutup Form' : 'Tambah Pengguna'}
         </button>
@@ -132,21 +134,25 @@ export default function UsersClient({ users: initial, roles }: Props) {
           <h2 className="font-bold mb-4 flex items-center gap-2">
             <UserPlus className="h-4 w-4 text-primary" /> Form Tambah Pengguna
           </h2>
-          <form onSubmit={handleCreate} className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1.5">Username <span className="text-red-500">*</span></label>
-              <input value={form.username} onChange={set('username')} placeholder="username_unik" className={inputCls} />
+              <input value={form.username} onChange={setField('username')} placeholder="username_unik" className={inputCls} />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">Nama Lengkap</label>
-              <input value={form.full_name} onChange={set('full_name')} placeholder="Nama Lengkap" className={inputCls} />
+              <input value={form.full_name} onChange={setField('full_name')} placeholder="Nama Lengkap" className={inputCls} />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">Password <span className="text-red-500">*</span></label>
               <div className="relative">
-                <input type={showPw ? 'text' : 'password'} value={form.password} onChange={set('password')}
+                <input
+                  type={showPw ? 'text' : 'password'}
+                  value={form.password}
+                  onChange={setField('password')}
                   placeholder="Min. 8 karakter"
-                  className="w-full h-10 px-3 pr-10 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                  className="w-full h-10 px-3 pr-10 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                />
                 <button type="button" onClick={() => setShowPw(!showPw)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                   {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -155,23 +161,25 @@ export default function UsersClient({ users: initial, roles }: Props) {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">Role <span className="text-red-500">*</span></label>
-              <select value={form.role_id} onChange={set('role_id')} className={inputCls}>
+              <select value={form.role_id} onChange={setField('role_id')} className={inputCls}>
                 <option value="">Pilih Role...</option>
-                {roles.filter(r => r.name !== 'viewer' && r.name !== 'tim_seleksi').map(r =>
+                {roles.filter(r => r.name !== 'viewer' && r.name !== 'tim_seleksi').map(r => (
                   <option key={r.id} value={r.id}>{r.name.replace(/_/g, ' ')}</option>
-                )}
+                ))}
               </select>
             </div>
             <div className="sm:col-span-2 flex justify-end gap-3">
               <button type="button" onClick={() => setShowForm(false)}
-                className="px-4 py-2 rounded-lg border border-border hover:bg-accent text-sm transition-colors">Batal</button>
-              <button type="submit" disabled={loading}
+                className="px-4 py-2 rounded-lg border border-border hover:bg-accent text-sm transition-colors">
+                Batal
+              </button>
+              <button type="button" disabled={loading} onClick={handleCreate}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 disabled:opacity-60 transition-colors">
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />}
                 Buat Pengguna
               </button>
             </div>
-          </form>
+          </div>
         </div>
       )}
 
@@ -190,7 +198,7 @@ export default function UsersClient({ users: initial, roles }: Props) {
                 <tr key={u.id} className="border-b border-border/50 hover:bg-muted/30">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                      <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary shrink-0">
                         {(u.full_name ?? u.username).charAt(0).toUpperCase()}
                       </div>
                       <span className="font-medium">{u.username}</span>
@@ -210,15 +218,21 @@ export default function UsersClient({ users: initial, roles }: Props) {
                   <td className="px-4 py-3 text-xs text-muted-foreground">{formatDate(u.created_at)}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">
-                      <button onClick={() => openEdit(u)}
+                      <button type="button" onClick={() => openEdit(u)}
                         className="h-7 px-2 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors flex items-center gap-1">
                         <Pencil className="h-3 w-3" /> Edit
                       </button>
-                      <button onClick={() => toggleActive(u.id, u.is_active)}
-                        className={`h-7 px-2 rounded text-xs font-medium transition-colors flex items-center gap-1 ${u.is_active ? 'bg-orange-100 text-orange-700 hover:bg-orange-200' : 'bg-green-100 text-green-700 hover:bg-green-200'}`}>
-                        {u.is_active ? <><UserX className="h-3 w-3" /> Nonaktif</> : <><UserCheck className="h-3 w-3" /> Aktifkan</>}
+                      <button type="button" onClick={() => toggleActive(u.id, u.is_active)}
+                        className={`h-7 px-2 rounded text-xs font-medium transition-colors flex items-center gap-1 ${
+                          u.is_active
+                            ? 'bg-orange-100 text-orange-700 hover:bg-orange-200'
+                            : 'bg-green-100 text-green-700 hover:bg-green-200'
+                        }`}>
+                        {u.is_active
+                          ? <><UserX className="h-3 w-3" /> Nonaktif</>
+                          : <><UserCheck className="h-3 w-3" /> Aktifkan</>}
                       </button>
-                      <button onClick={() => setDeleteUser(u)}
+                      <button type="button" onClick={() => setDeleteUser(u)}
                         className="h-7 px-2 rounded text-xs font-medium bg-red-100 text-red-700 hover:bg-red-200 transition-colors flex items-center gap-1">
                         <Trash2 className="h-3 w-3" /> Hapus
                       </button>
@@ -231,14 +245,20 @@ export default function UsersClient({ users: initial, roles }: Props) {
         </div>
       </div>
 
+      {/* Modal Edit */}
       {editUser && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-card rounded-xl border border-border w-full max-w-md shadow-xl">
             <div className="flex items-center justify-between p-5 border-b border-border">
-              <h3 className="font-bold flex items-center gap-2"><Pencil className="h-4 w-4 text-primary" /> Edit Pengguna</h3>
-              <button onClick={() => setEditUser(null)} className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
+              <h3 className="font-bold flex items-center gap-2">
+                <Pencil className="h-4 w-4 text-primary" /> Edit Pengguna
+              </h3>
+              <button type="button" onClick={() => setEditUser(null)}
+                className="text-muted-foreground hover:text-foreground">
+                <X className="h-4 w-4" />
+              </button>
             </div>
-            <form onSubmit={handleEdit} className="p-5 space-y-4">
+            <div className="p-5 space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1.5">Username</label>
                 <input value={editUser.username} disabled className={`${inputCls} opacity-60 cursor-not-allowed`} />
@@ -256,21 +276,24 @@ export default function UsersClient({ users: initial, roles }: Props) {
                   onChange={e => setEditForm(f => ({ ...f, role_id: e.target.value }))}
                   className={inputCls}>
                   <option value="">Pilih Role...</option>
-                  {roles.filter(r => r.name !== 'viewer' && r.name !== 'tim_seleksi').map(r =>
+                  {roles.filter(r => r.name !== 'viewer' && r.name !== 'tim_seleksi').map(r => (
                     <option key={r.id} value={r.id}>{r.name.replace(/_/g, ' ')}</option>
-                  )}
+                  ))}
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1.5">
-                  Reset Password <span className="text-xs text-muted-foreground font-normal">(kosongkan jika tidak ingin mengubah)</span>
+                  Reset Password{' '}
+                  <span className="text-xs text-muted-foreground font-normal">(kosongkan jika tidak ingin mengubah)</span>
                 </label>
                 <div className="relative">
-                  <input type={showEditPw ? 'text' : 'password'}
+                  <input
+                    type={showEditPw ? 'text' : 'password'}
                     value={editForm.password}
                     onChange={e => setEditForm(f => ({ ...f, password: e.target.value }))}
                     placeholder="Password baru (opsional)"
-                    className="w-full h-10 px-3 pr-10 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                    className="w-full h-10 px-3 pr-10 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
                   <button type="button" onClick={() => setShowEditPw(!showEditPw)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                     {showEditPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -279,18 +302,21 @@ export default function UsersClient({ users: initial, roles }: Props) {
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={() => setEditUser(null)}
-                  className="px-4 py-2 rounded-lg border border-border hover:bg-accent text-sm transition-colors">Batal</button>
-                <button type="submit" disabled={loading}
+                  className="px-4 py-2 rounded-lg border border-border hover:bg-accent text-sm transition-colors">
+                  Batal
+                </button>
+                <button type="button" disabled={loading} onClick={handleEdit}
                   className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 disabled:opacity-60 transition-colors">
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Pencil className="h-4 w-4" />}
                   Simpan Perubahan
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
 
+      {/* Modal Hapus */}
       {deleteUser && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-card rounded-xl border border-border w-full max-w-sm shadow-xl p-6">
@@ -299,9 +325,11 @@ export default function UsersClient({ users: initial, roles }: Props) {
               Akun <span className="font-semibold text-foreground">{deleteUser.username}</span> akan dihapus permanen dan tidak dapat dikembalikan.
             </p>
             <div className="flex justify-end gap-3">
-              <button onClick={() => setDeleteUser(null)}
-                className="px-4 py-2 rounded-lg border border-border hover:bg-accent text-sm transition-colors">Batal</button>
-              <button onClick={handleDelete} disabled={loading}
+              <button type="button" onClick={() => setDeleteUser(null)}
+                className="px-4 py-2 rounded-lg border border-border hover:bg-accent text-sm transition-colors">
+                Batal
+              </button>
+              <button type="button" disabled={loading} onClick={handleDelete}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 disabled:opacity-60 transition-colors">
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
                 Ya, Hapus
