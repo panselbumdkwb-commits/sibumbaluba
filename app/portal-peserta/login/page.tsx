@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { FileText, Eye, EyeOff, Loader2, ArrowLeft, UserPlus } from 'lucide-react'
 import { toast } from 'sonner'
@@ -9,10 +9,24 @@ import { createClient } from '@/lib/supabase-client'
 
 export default function PortalPesertaLoginPage() {
   const router = useRouter()
-  const [email, setEmail]       = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [showPw, setShowPw]     = useState(false)
-  const [loading, setLoading]   = useState(false)
+  const [showPw, setShowPw] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [emailReady, setEmailReady] = useState(false)
+  const [passwordReady, setPasswordReady] = useState(false)
+  const emailRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
+
+  // Clear session & paksa field kosong saat halaman dibuka
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.signOut()
+    setEmail('')
+    setPassword('')
+    if (emailRef.current) emailRef.current.value = ''
+    if (passwordRef.current) passwordRef.current.value = ''
+  }, [])
 
   async function handleLogin() {
     if (!email || !password) { toast.error('Email dan password wajib diisi'); return }
@@ -20,7 +34,12 @@ export default function PortalPesertaLoginPage() {
     try {
       const supabase = createClient()
       const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) { toast.error('Email atau password salah'); return }
+      if (error) {
+        toast.error('Email atau password salah')
+        setPassword('')
+        if (passwordRef.current) passwordRef.current.value = ''
+        return
+      }
 
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { toast.error('Login gagal'); return }
@@ -36,7 +55,7 @@ export default function PortalPesertaLoginPage() {
         toast.error('Akun peserta tidak ditemukan. Silakan daftar terlebih dahulu.')
         return
       }
-      if (['tidak_aktif','tidak_lulus'].includes(peserta.status)) {
+      if (['tidak_aktif', 'tidak_lulus'].includes(peserta.status)) {
         await supabase.auth.signOut()
         toast.error('Akun Anda tidak aktif. Hubungi panitia untuk informasi lebih lanjut.')
         return
@@ -52,7 +71,7 @@ export default function PortalPesertaLoginPage() {
     }
   }
 
-  const inputCls = 'w-full h-10 px-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all'
+  const inputBase = 'w-full h-10 px-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-secondary/10 via-background to-primary/10 flex items-center justify-center p-4">
@@ -73,22 +92,45 @@ export default function PortalPesertaLoginPage() {
             </p>
           </div>
 
+          {/* Honeypot anti-autofill tersembunyi */}
+          <div style={{ display: 'none' }} aria-hidden="true">
+            <input type="email" name="email_fake" tabIndex={-1} />
+            <input type="password" name="password_fake" tabIndex={-1} />
+          </div>
+
           <div className="space-y-5">
             <div>
               <label className="block text-sm font-medium mb-1.5">Email Pendaftaran</label>
-              <input type="email" value={email}
+              <input
+                ref={emailRef}
+                type="email"
+                value={email}
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                autoComplete="email" placeholder="email@anda.com" className={inputCls} />
+                readOnly={!emailReady}
+                onFocus={() => setEmailReady(true)}
+                autoComplete="off"
+                name="email_peserta_sibumbalumba"
+                placeholder="email@anda.com"
+                className={inputBase}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">Password</label>
               <div className="relative">
-                <input type={showPw ? 'text' : 'password'} value={password}
+                <input
+                  ref={passwordRef}
+                  type={showPw ? 'text' : 'password'}
+                  value={password}
                   onChange={e => setPassword(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                  autoComplete="current-password" placeholder="Password Anda"
-                  className="w-full h-10 px-3 pr-10 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all" />
+                  readOnly={!passwordReady}
+                  onFocus={() => setPasswordReady(true)}
+                  autoComplete="new-password"
+                  name="password_peserta_sibumbalumba"
+                  placeholder="Password Anda"
+                  className={`${inputBase} pr-10`}
+                />
                 <button type="button" onClick={() => setShowPw(!showPw)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
                   {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
