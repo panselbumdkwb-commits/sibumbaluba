@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Shield, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -12,14 +12,27 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [showPw, setShowPw] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [usernameReady, setUsernameReady] = useState(false)
+  const [passwordReady, setPasswordReady] = useState(false)
+  const usernameRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
 
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault()
+  // Clear session & paksa field kosong saat halaman dibuka
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.signOut()
+    setUsername('')
+    setPassword('')
+    // Paksa browser tidak bisa autofill
+    if (usernameRef.current) usernameRef.current.value = ''
+    if (passwordRef.current) passwordRef.current.value = ''
+  }, [])
+
+  async function handleLogin() {
+    if (!username || !password) { toast.error('Username dan password wajib diisi'); return }
     setLoading(true)
     try {
       const supabase = createClient()
-
-      // Find user by username to get mapped email
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -29,10 +42,11 @@ export default function LoginPage() {
 
       if (!res.ok || data.error) {
         toast.error(data.error || 'Username atau password salah')
+        setPassword('')
+        if (passwordRef.current) passwordRef.current.value = ''
         return
       }
 
-      // Sign in with mapped email
       const { error } = await supabase.auth.signInWithPassword({
         email: data.email,
         password,
@@ -40,6 +54,8 @@ export default function LoginPage() {
 
       if (error) {
         toast.error('Username atau password salah')
+        setPassword('')
+        if (passwordRef.current) passwordRef.current.value = ''
         return
       }
 
@@ -53,12 +69,12 @@ export default function LoginPage() {
     }
   }
 
+  const inputBase = 'w-full h-10 px-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all'
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Card */}
         <div className="bg-card border border-border rounded-2xl shadow-xl p-8">
-          {/* Logo */}
           <div className="flex flex-col items-center mb-8">
             <div className="h-16 w-16 rounded-2xl bg-primary flex items-center justify-center mb-4 shadow-lg">
               <Shield className="h-8 w-8 text-primary-foreground" />
@@ -67,35 +83,47 @@ export default function LoginPage() {
             <p className="text-sm text-muted-foreground mt-1">Login Internal – Kota Batu</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          {/* Honeypot anti-autofill tersembunyi */}
+          <div style={{ display: 'none' }} aria-hidden="true">
+            <input type="text" name="username_fake" tabIndex={-1} />
+            <input type="password" name="password_fake" tabIndex={-1} />
+          </div>
+
+          <div className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">
-                Username
-              </label>
+              <label className="block text-sm font-medium text-foreground mb-1.5">Username</label>
               <input
+                ref={usernameRef}
                 type="text"
                 value={username}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+                onChange={e => setUsername(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleLogin()}
                 required
-                autoComplete="username"
+                readOnly={!usernameReady}
+                onFocus={() => setUsernameReady(true)}
+                autoComplete="off"
+                name="username_sibumbalumba"
                 placeholder="Masukkan username"
-                className="w-full h-10 px-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                className={inputBase}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">
-                Password
-              </label>
+              <label className="block text-sm font-medium text-foreground mb-1.5">Password</label>
               <div className="relative">
                 <input
+                  ref={passwordRef}
                   type={showPw ? 'text' : 'password'}
                   value={password}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleLogin()}
                   required
-                  autoComplete="current-password"
+                  readOnly={!passwordReady}
+                  onFocus={() => setPasswordReady(true)}
+                  autoComplete="new-password"
+                  name="password_sibumbalumba"
                   placeholder="Masukkan password"
-                  className="w-full h-10 px-3 pr-10 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                  className={`${inputBase} pr-10`}
                 />
                 <button
                   type="button"
@@ -108,17 +136,14 @@ export default function LoginPage() {
             </div>
 
             <button
-              type="submit"
+              type="button"
               disabled={loading}
+              onClick={handleLogin}
               className="w-full h-10 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 disabled:opacity-60 transition-all flex items-center justify-center gap-2"
             >
-              {loading ? (
-                <><Loader2 className="h-4 w-4 animate-spin" /> Masuk...</>
-              ) : (
-                'Masuk'
-              )}
+              {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Masuk...</> : 'Masuk'}
             </button>
-          </form>
+          </div>
 
           <div className="mt-6 pt-6 border-t border-border text-center">
             <p className="text-xs text-muted-foreground">
