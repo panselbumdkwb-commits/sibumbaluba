@@ -27,15 +27,64 @@ export async function POST(req: Request) {
     }
 
     // Cek email sudah terdaftar di seleksi ini
-    const { data: existing } = await adminClient
+    const { data: existingPeserta } = await adminClient
       .from('peserta_seleksi')
-      .select('id')
+      .select('id, nomor_peserta')
       .eq('email', email)
       .eq('seleksi_id', seleksi_id)
       .maybeSingle()
 
-    if (existing) {
-      return NextResponse.json({ error: 'Email sudah terdaftar di seleksi ini' }, { status: 409 })
+    if (existingPeserta) {
+      return NextResponse.json({
+        error: `Email ini sudah terdaftar di seleksi ini. Nomor peserta Anda: ${existingPeserta.nomor_peserta ?? '-'}. Silakan login dengan email dan password yang sudah dibuat.`
+      }, { status: 409 })
+    }
+
+    // Cek apakah email sudah ada di auth.users (dari pendaftaran gagal sebelumnya)
+    const { data: existingAuth } = await adminClient.auth.admin.listUsers()
+    const existingUser = existingAuth?.users?.find(u => u.email === email)
+
+    let auth_user_id: string
+
+    if (existingUser) {
+      // Email sudah ada di auth tapi belum di peserta_seleksi
+      // Cek apakah ini akun internal (ada di public.users)
+      const { data: internalUser } = await adminClient
+        .from('users')
+        .select('id, role:roles(name)')
+        .eq('id', existingUser.id)
+        .maybeSingle()
+
+      if (internalUser) {
+        return NextResponse.json({
+          error: 'Email ini sudah digunakan oleh akun internal sistem. Gunakan email lain.'
+        }, { status: 409 })
+      }
+
+      // Akun ada di auth tapi bukan internal (pendaftaran lama yang gagal)
+      // Update password dan gunakan id yang ada
+      await adminClient.auth.admin.updateUserById(existingUser.id, {
+        password,
+        email_confirm: true,
+        user_metadata: { full_name: nama },
+      })
+      auth_user_id = existingUser.id
+    } else {
+      // Buat akun auth baru
+      const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: { full_name: nama },
+      })
+      if (authError) {
+        return NextResponse.json({
+          error: authError.message.includes('already been registered')
+            ? 'Email ini sudah terdaftar. Silakan login atau gunakan email lain.'
+            : authError.message
+        }, { status: 500 })
+      }
+      auth_user_id = authData.user.id
     }
 
     // Generate username dari email
@@ -44,26 +93,15 @@ export async function POST(req: Request) {
     // Hash password
     const password_hash = await bcrypt.hash(password, 12)
 
-    // Buat akun auth.users dengan email asli
-    const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
-      email,
-      password,
-      email_confirm: true,
-      user_metadata: { full_name: nama },
-    })
-    if (authError) return NextResponse.json({ error: authError.message }, { status: 500 })
-
-    const auth_user_id = authData.user.id
-
-    // Insert ke users table dengan role peserta
+    // Pastikan ada di public.users dengan role peserta
     const { data: roleData } = await adminClient.from('roles').select('id').eq('name', 'peserta').single()
-    await adminClient.from('users').insert({
+    await adminClient.from('users').upsert({
       id: auth_user_id,
       username,
       full_name: nama,
       role_id: roleData?.id ?? null,
       is_active: true,
-    })
+    }, { onConflict: 'id' })
 
     // Generate nomor peserta
     const { data: nomorData } = await adminClient.rpc('generate_nomor_peserta', {
@@ -89,18 +127,8 @@ export async function POST(req: Request) {
       .single()
 
     if (pesertaError) {
-      await adminClient.auth.admin.deleteUser(auth_user_id)
-      return NextResponse.json({ error: pesertaError.message }, { status: 500 })
+      return NextResponse.json({ error: 'Gagal menyimpan data peserta: ' + pesertaError.message }, { status: 500 })
     }
-
-    // Notifikasi
-    await adminClient.from('notifikasi').insert({
-      peserta_id: peserta.id,
-      judul: '✅ Registrasi Berhasil',
-      isi: `Selamat ${nama}, pendaftaran Anda berhasil. Nomor peserta: ${peserta.nomor_peserta ?? '-'}. Silakan login dan lengkapi formulir pendaftaran.`,
-      kategori: 'sukses',
-      action_url: '/portal-peserta/profil',
-    })
 
     return NextResponse.json({
       success: true,
